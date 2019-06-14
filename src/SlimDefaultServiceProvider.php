@@ -1,6 +1,6 @@
 <?php
 
-namespace MilesChou\LaravelBridger\Slim;
+namespace LaravelBridge\Slim;
 
 use Illuminate\Support\ServiceProvider;
 use Slim\CallableResolver;

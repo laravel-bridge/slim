@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use MilesChou\LaravelBridger\Slim\App;
+use LaravelBridge\Slim\App;
 use PHPUnit\Framework\TestCase;
 use Recca0120\LaravelBridge\Laravel;
 use Slim\Http\Environment;

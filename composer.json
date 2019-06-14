@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MilesChou\\LaravelBridger\\Slim\\": "src"
+            "LaravelBridge\\Slim\\": "src"
         }
     },
     "autoload-dev": {

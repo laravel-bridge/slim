@@ -1,6 +1,6 @@
 <?php
 
-namespace MilesChou\LaravelBridger\Slim;
+namespace LaravelBridge\Slim;
 
 use Recca0120\LaravelBridge\Laravel;
 use Slim\App as SlimApp;
