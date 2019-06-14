@@ -11,12 +11,10 @@ use Slim\Http\Response;
 
 class AppTest extends TestCase
 {
-    public function testSample()
-    {
-        $this->assertInstanceOf(App::class, new App(new Laravel()));
-    }
-
-    public function testSimpleRoute()
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenTestASimpleRoute()
     {
         $container = new Laravel();
         $container->bootstrap();
