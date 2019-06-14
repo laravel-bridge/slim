@@ -9,10 +9,15 @@ class App extends SlimApp
 {
     /**
      * @param Laravel $container
+     * @param bool $useSlimService
      */
-    public function __construct(Laravel $container)
+    public function __construct(Laravel $container, $useSlimService = true)
     {
-        (new SlimDefaultServiceProvider($container))->register();
+        if ($useSlimService) {
+            (new SlimDefaultServiceProvider($container))->register();
+        } else {
+            (new LaravelServiceProvider($container))->register();
+        }
 
         parent::__construct($container);
     }
