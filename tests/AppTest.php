@@ -30,4 +30,21 @@ class AppTest extends TestCase
 
         $this->assertSame('bar', (string)$actual->getBody());
     }
+
+    /**
+     * @test
+     */
+    public function shouldNotOverridePresetEntry()
+    {
+        $container = new Laravel();
+        $container->bootstrap();
+
+        $container->getApp()['setting'] = ['some', 'array'];
+
+        $app = new App($container);
+
+        $actual = $app->getContainer()->get('setting');
+
+        $this->assertSame(['some', 'array'], $actual);
+    }
 }
