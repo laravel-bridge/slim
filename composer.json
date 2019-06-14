@@ -9,6 +9,7 @@
         "slim/slim": "^3.0"
     },
     "require-dev": {
+        "php-coveralls/php-coveralls": "^2.1",
         "phpunit/phpunit": "^4 | ^5 | ^6",
         "squizlabs/php_codesniffer": "^3.4"
     },
