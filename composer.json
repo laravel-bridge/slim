@@ -1,6 +1,6 @@
 {
-    "name": "mileschou/slim-bridge-laravel",
-    "description": "The bridge for Laravel in Slim framework",
+    "name": "laravel-bridge/slim",
+    "description": "The Laravel Bridge use on Slim framework",
     "license": "MIT",
     "type": "library",
     "require": {
@@ -14,12 +14,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MilesChou\\LaravelBridger\\Slim\\": "src/"
+            "MilesChou\\LaravelBridger\\Slim\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests"
         }
     },
     "config": {
