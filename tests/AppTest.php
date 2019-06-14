@@ -3,11 +3,31 @@
 namespace Tests;
 
 use MilesChou\LaravelBridger\Slim\App;
+use PHPUnit\Framework\TestCase;
+use Recca0120\LaravelBridge\Laravel;
+use Slim\Http\Environment;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
-class AppTest extends \PHPUnit_Framework_TestCase
+class AppTest extends TestCase
 {
     public function testSample()
     {
-        $this->assertInstanceOf(App::class, new App(new \Slim\App()));
+        $this->assertInstanceOf(App::class, new App(new Laravel()));
+    }
+
+    public function testSimpleRoute()
+    {
+        $container = new Laravel();
+        $container->bootstrap();
+
+        $app = new App($container);
+        $app->get('/', function () {
+            return 'bar';
+        });
+
+        $actual = $app(Request::createFromEnvironment(Environment::mock()), new Response());
+
+        $this->assertSame('bar', (string)$actual->getBody());
     }
 }

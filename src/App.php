@@ -2,28 +2,23 @@
 
 namespace MilesChou\LaravelBridger\Slim;
 
+use Recca0120\LaravelBridge\Laravel;
 use Slim\App as SlimApp;
 
 /**
  * @mixin SlimApp
  */
-class App
+class App extends SlimApp
 {
-    /**
-     * @var SlimApp
-     */
-    private $slimApp;
+    use PrepareContainerTrait;
 
     /**
-     * @param SlimApp $slimApp
+     * @param Laravel $container
      */
-    public function __construct(SlimApp $slimApp)
+    public function __construct(Laravel $container)
     {
-        $this->slimApp = $slimApp;
-    }
+        $this->prepareLaravelContainer($container);
 
-    public function __call($method, $arguments)
-    {
-        return $this->slimApp->__call($method, $arguments);
+        parent::__construct($container);
     }
 }
