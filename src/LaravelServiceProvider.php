@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\ServerRequest;
 use Illuminate\Http\Request as LaravelRequest;
 use LaravelBridge\Slim\Handlers\Error;
 use LaravelBridge\Slim\Handlers\Strategies\RequestResponse;
+use LaravelBridge\Slim\Handlers\NotFound;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 
@@ -23,6 +24,13 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
     {
         $this->app->singleton('foundHandler', function () {
             return new RequestResponse($this->app);
+        });
+    }
+
+    public function registerNotFoundHandler()
+    {
+        $this->app->singleton('notFoundHandler', function () {
+            return new NotFound($this->app);
         });
     }
 

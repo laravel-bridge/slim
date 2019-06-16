@@ -6,26 +6,26 @@ use Exception;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use LaravelBridge\Slim\App;
-use LaravelBridge\Slim\Handlers\Error;
+use LaravelBridge\Slim\Handlers\NotFound;
 use PHPUnit\Framework\TestCase;
 use Recca0120\LaravelBridge\Laravel;
 
-class ErrorTest extends TestCase
+class NotFoundTest extends TestCase
 {
     /**
      * @test
      */
-    public function shouldGetSymfonyResponseWhenCatchException()
+    public function shouldGetSymfonyResponseWhenNotFound()
     {
         $container = (new App(new Laravel()))->getContainer();
-        $target = new Error($container);
+        $target = new NotFound($container);
 
-        $mockRequest = new ServerRequest('GET', '/');
+        $mockRequest = new ServerRequest('GET', '/whatever');
 
-        $response = $target($mockRequest, new Response(), new Exception());
+        $response = $target($mockRequest, new Response(), []);
 
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertContains('Whoops, looks like something went wrong.', (string)$response->getBody());
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertContains('Sorry, the page you are looking for could not be found.', (string)$response->getBody());
     }
 
     /**
@@ -34,7 +34,7 @@ class ErrorTest extends TestCase
     public function shouldGetJsonResponseWhenRequestExpectJson()
     {
         $container = (new App(new Laravel()))->getContainer();
-        $target = new Error($container);
+        $target = new NotFound($container);
 
         $mockRequest = new ServerRequest('GET', '/', [
             'ACCEPT' => 'application/json',
@@ -42,7 +42,7 @@ class ErrorTest extends TestCase
 
         $response = $target($mockRequest, new Response(), new Exception());
 
-        $this->assertSame(500, $response->getStatusCode());
+        $this->assertSame(404, $response->getStatusCode());
         $this->assertJson((string)$response->getBody());
     }
 }
