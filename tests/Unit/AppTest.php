@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use LaravelBridge\Slim\App;
 use PHPUnit\Framework\TestCase;

@@ -9,6 +9,7 @@ use LaravelBridge\Slim\Handlers\Error;
 use LaravelBridge\Slim\Handlers\NotAllowed;
 use LaravelBridge\Slim\Handlers\NotFound;
 use LaravelBridge\Slim\Handlers\Strategies\RequestResponse;
+use LaravelBridge\Slim\Handlers\PhpError;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 
@@ -39,6 +40,13 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
     {
         $this->app->singleton('notFoundHandler', function () {
             return new NotFound($this->app);
+        });
+    }
+
+    public function registerPhpErrorHandler()
+    {
+        $this->app->singleton('phpErrorHandler', function () {
+            return new PhpError($this->app->get('settings')['displayErrorDetails']);
         });
     }
 
