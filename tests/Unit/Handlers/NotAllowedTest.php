@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Handlers;
 
-use Exception;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use LaravelBridge\Slim\App;

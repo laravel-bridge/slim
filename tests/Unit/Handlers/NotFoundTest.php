@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Handlers;
 
-use Exception;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use LaravelBridge\Slim\App;
@@ -22,7 +21,7 @@ class NotFoundTest extends TestCase
 
         $mockRequest = new ServerRequest('GET', '/whatever');
 
-        $response = $target($mockRequest, new Response(), []);
+        $response = $target($mockRequest, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertContains('Sorry, the page you are looking for could not be found.', (string)$response->getBody());
@@ -36,11 +35,11 @@ class NotFoundTest extends TestCase
         $container = (new App(new Laravel()))->getContainer();
         $target = new NotFound($container);
 
-        $mockRequest = new ServerRequest('GET', '/', [
+        $mockRequest = new ServerRequest('GET', '/whatever', [
             'ACCEPT' => 'application/json',
         ]);
 
-        $response = $target($mockRequest, new Response(), new Exception());
+        $response = $target($mockRequest, new Response());
 
         $this->assertSame(404, $response->getStatusCode());
         $this->assertJson((string)$response->getBody());
