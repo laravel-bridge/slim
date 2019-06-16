@@ -33,21 +33,21 @@ class SlimDefaultServiceProvider extends ServiceProvider
         $this->registerSetting();
     }
 
-    public function registerCallableResolver()
+    protected function registerCallableResolver()
     {
         $this->app->singleton('callableResolver', function () {
             return new CallableResolver($this->app);
         });
     }
 
-    public function registerEnvironment()
+    protected function registerEnvironment()
     {
         $this->app->singleton('environment', function () {
             return new Environment($_SERVER);
         });
     }
 
-    public function registerErrorHandler()
+    protected function registerErrorHandler()
     {
         $this->app->singleton('errorHandler', function () {
             return new Error(
@@ -56,42 +56,42 @@ class SlimDefaultServiceProvider extends ServiceProvider
         });
     }
 
-    public function registerFoundHandler()
+    protected function registerFoundHandler()
     {
         $this->app->singleton('foundHandler', function () {
             return new RequestResponse;
         });
     }
 
-    public function registerNotAllowedHandler()
+    protected function registerNotAllowedHandler()
     {
         $this->app->singleton('notAllowedHandler', function () {
             return new NotAllowed;
         });
     }
 
-    public function registerNotFoundHandler()
+    protected function registerNotFoundHandler()
     {
         $this->app->singleton('notFoundHandler', function () {
             return new NotFound;
         });
     }
 
-    public function registerPhpErrorHandler()
+    protected function registerPhpErrorHandler()
     {
         $this->app->singleton('phpErrorHandler', function () {
             return new PhpError($this->app->get('settings')['displayErrorDetails']);
         });
     }
 
-    public function registerRequest()
+    protected function registerRequest()
     {
         $this->app->singleton('request', function () {
             return Request::createFromEnvironment($this->app->get('environment'));
         });
     }
 
-    public function registerResponse()
+    protected function registerResponse()
     {
         $this->app->singleton('response', function () {
             $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
@@ -100,7 +100,7 @@ class SlimDefaultServiceProvider extends ServiceProvider
         });
     }
 
-    public function registerRouter()
+    protected function registerRouter()
     {
         $this->app->singleton('router', function () {
             $routerCacheFile = false;
@@ -115,7 +115,7 @@ class SlimDefaultServiceProvider extends ServiceProvider
         });
     }
 
-    public function registerSetting()
+    protected function registerSetting()
     {
         $this->app->singleton('settings', function () {
             return new Collection([

@@ -15,42 +15,42 @@ use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 
 class LaravelServiceProvider extends SlimDefaultServiceProvider
 {
-    public function registerErrorHandler()
+    protected function registerErrorHandler()
     {
         $this->app->singleton('errorHandler', function () {
             return new Error($this->app);
         });
     }
 
-    public function registerFoundHandler()
+    protected function registerFoundHandler()
     {
         $this->app->singleton('foundHandler', function () {
             return new RequestResponse($this->app);
         });
     }
 
-    public function registerNotAllowedHandler()
+    protected function registerNotAllowedHandler()
     {
         $this->app->singleton('notAllowedHandler', function () {
             return new NotAllowed($this->app);
         });
     }
 
-    public function registerNotFoundHandler()
+    protected function registerNotFoundHandler()
     {
         $this->app->singleton('notFoundHandler', function () {
             return new NotFound($this->app);
         });
     }
 
-    public function registerPhpErrorHandler()
+    protected function registerPhpErrorHandler()
     {
         $this->app->singleton('phpErrorHandler', function () {
             return new PhpError($this->app->get('settings')['displayErrorDetails']);
         });
     }
 
-    public function registerRequest()
+    protected function registerRequest()
     {
         $this->app->singleton(HttpFoundationFactory::class);
         $this->app->singleton(DiactorosFactory::class);
@@ -68,7 +68,7 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
         });
     }
 
-    public function registerResponse()
+    protected function registerResponse()
     {
         $this->app->singleton('response', function () {
             $headers = ['Content-Type' => 'text/html; charset=UTF-8'];
