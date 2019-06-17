@@ -18,49 +18,49 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
 {
     protected function registerErrorHandler()
     {
-        $this->app->singleton('errorHandler', function () {
+        $this->singletonIf('errorHandler', function () {
             return new Error($this->app);
         });
     }
 
     protected function registerFoundHandler()
     {
-        $this->app->singleton('foundHandler', function () {
+        $this->singletonIf('foundHandler', function () {
             return new RequestResponse($this->app);
         });
     }
 
     protected function registerNotAllowedHandler()
     {
-        $this->app->singleton('notAllowedHandler', function () {
+        $this->singletonIf('notAllowedHandler', function () {
             return new NotAllowed($this->app);
         });
     }
 
     protected function registerNotFoundHandler()
     {
-        $this->app->singleton('notFoundHandler', function () {
+        $this->singletonIf('notFoundHandler', function () {
             return new NotFound($this->app);
         });
     }
 
     protected function registerPhpErrorHandler()
     {
-        $this->app->singleton('phpErrorHandler', function () {
+        $this->singletonIf('phpErrorHandler', function () {
             return new PhpError($this->app);
         });
     }
 
     protected function registerRequest()
     {
-        $this->app->singleton(HttpFoundationFactory::class);
-        $this->app->singleton(DiactorosFactory::class);
+        $this->singletonIf(HttpFoundationFactory::class);
+        $this->singletonIf(DiactorosFactory::class);
 
-        $this->app->singleton('request', function () {
+        $this->singletonIf('request', function () {
             return ServerRequest::fromGlobals();
         });
 
-        $this->app->singleton(LaravelRequest::class, function () {
+        $this->singletonIf(LaravelRequest::class, function () {
             $symfonyRequest = $this->app->make(HttpFoundationFactory::class)->createRequest(
                 $this->app->make('request')
             );
@@ -71,7 +71,7 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
 
     protected function registerResponse()
     {
-        $this->app->singleton('response', function () {
+        $this->singletonIf('response', function () {
             $headers = ['Content-Type' => 'text/html; charset=UTF-8'];
 
             return new Response(200, $headers, null, $this->app->get('settings')['httpVersion']);
@@ -80,7 +80,7 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
 
     protected function registerSetting()
     {
-        $this->app->singleton('settings', function () {
+        $this->singletonIf('settings', function () {
             return new Fluent([
                 'httpVersion' => '1.1',
                 'responseChunkSize' => 4096,

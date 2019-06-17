@@ -35,21 +35,21 @@ class SlimDefaultServiceProvider extends ServiceProvider
 
     protected function registerCallableResolver()
     {
-        $this->app->singleton('callableResolver', function () {
+        $this->singletonIf('callableResolver', function () {
             return new CallableResolver($this->app);
         });
     }
 
     protected function registerEnvironment()
     {
-        $this->app->singleton('environment', function () {
+        $this->singletonIf('environment', function () {
             return new Environment($_SERVER);
         });
     }
 
     protected function registerErrorHandler()
     {
-        $this->app->singleton('errorHandler', function () {
+        $this->singletonIf('errorHandler', function () {
             return new Error(
                 $this->app->make('settings')['displayErrorDetails']
             );
@@ -58,42 +58,42 @@ class SlimDefaultServiceProvider extends ServiceProvider
 
     protected function registerFoundHandler()
     {
-        $this->app->singleton('foundHandler', function () {
+        $this->singletonIf('foundHandler', function () {
             return new RequestResponse;
         });
     }
 
     protected function registerNotAllowedHandler()
     {
-        $this->app->singleton('notAllowedHandler', function () {
+        $this->singletonIf('notAllowedHandler', function () {
             return new NotAllowed;
         });
     }
 
     protected function registerNotFoundHandler()
     {
-        $this->app->singleton('notFoundHandler', function () {
+        $this->singletonIf('notFoundHandler', function () {
             return new NotFound;
         });
     }
 
     protected function registerPhpErrorHandler()
     {
-        $this->app->singleton('phpErrorHandler', function () {
+        $this->singletonIf('phpErrorHandler', function () {
             return new PhpError($this->app->make('settings')['displayErrorDetails']);
         });
     }
 
     protected function registerRequest()
     {
-        $this->app->singleton('request', function () {
+        $this->singletonIf('request', function () {
             return Request::createFromEnvironment($this->app->make('environment'));
         });
     }
 
     protected function registerResponse()
     {
-        $this->app->singleton('response', function () {
+        $this->singletonIf('response', function () {
             $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
             $response = new Response(200, $headers);
             return $response->withProtocolVersion($this->app->make('settings')['httpVersion']);
@@ -102,7 +102,7 @@ class SlimDefaultServiceProvider extends ServiceProvider
 
     protected function registerRouter()
     {
-        $this->app->singleton('router', function () {
+        $this->singletonIf('router', function () {
             $routerCacheFile = false;
             if (isset($this->app->make('settings')['routerCacheFile'])) {
                 $routerCacheFile = $this->app->make('settings')['routerCacheFile'];
@@ -117,7 +117,7 @@ class SlimDefaultServiceProvider extends ServiceProvider
 
     protected function registerSetting()
     {
-        $this->app->singleton('settings', function () {
+        $this->singletonIf('settings', function () {
             return new Collection([
                 'httpVersion' => '1.1',
                 'responseChunkSize' => 4096,
@@ -128,5 +128,10 @@ class SlimDefaultServiceProvider extends ServiceProvider
                 'routerCacheFile' => false,
             ]);
         });
+    }
+
+    protected function singletonIf($abstract, $concrete = null)
+    {
+        $this->app->bindIf($abstract, $concrete, true);
     }
 }

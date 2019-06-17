@@ -2,7 +2,8 @@
 
 namespace LaravelBridge\Slim;
 
-use Illuminate\Contracts\Container\Container;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\Container as ContainerContracts;
 use LaravelBridge\Support\ContainerBridge;
 use Psr\Container\ContainerInterface;
 use Slim\App as SlimApp;
@@ -10,11 +11,15 @@ use Slim\App as SlimApp;
 class App extends SlimApp
 {
     /**
-     * @param Container $container
+     * @param ContainerContracts|array $container
      * @param bool $useSlimService
      */
-    public function __construct(Container $container, $useSlimService = true)
+    public function __construct($container = [], $useSlimService = true)
     {
+        if (is_array($container)) {
+            $container = $this->buildContainer($container);
+        }
+
         if (!$container instanceof ContainerInterface) {
             $container = new ContainerBridge($container);
         }
@@ -26,5 +31,24 @@ class App extends SlimApp
         }
 
         parent::__construct($container);
+    }
+
+    /**
+     * @param array $containerAssociation
+     * @return ContainerContracts
+     */
+    protected function buildContainer(array $containerAssociation)
+    {
+        $container = new Container();
+
+        foreach ($containerAssociation as $abstract => $concrete) {
+            if (is_callable($concrete) || (is_string($concrete) && class_exists($concrete))) {
+                $container->singleton($abstract, $concrete);
+            } else {
+                $container->instance($abstract, $concrete);
+            }
+        }
+
+        return $container;
     }
 }
