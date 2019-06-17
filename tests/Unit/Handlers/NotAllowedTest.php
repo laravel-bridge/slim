@@ -4,10 +4,10 @@ namespace Tests\Unit\Handlers;
 
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use Illuminate\Container\Container;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\NotAllowed;
 use PHPUnit\Framework\TestCase;
-use Recca0120\LaravelBridge\Laravel;
 
 class NotAllowedTest extends TestCase
 {
@@ -16,7 +16,7 @@ class NotAllowedTest extends TestCase
      */
     public function shouldGetSymfonyResponseWhenCallByNotAllowedMethod()
     {
-        $container = (new App(new Laravel()))->getContainer();
+        $container = (new App(new Container()))->getContainer();
         $container->get('settings')->set('displayErrorDetails', true);
 
         $target = new NotAllowed($container);
@@ -35,7 +35,7 @@ class NotAllowedTest extends TestCase
      */
     public function shouldGetJsonResponseWhenCallByNotAllowedMethodAndRequestWantsJson()
     {
-        $container = (new App(new Laravel()))->getContainer();
+        $container = (new App(new Container()))->getContainer();
         $container->get('settings')->set('displayErrorDetails', true);
 
         $target = new NotAllowed($container);

@@ -2,13 +2,11 @@
 
 namespace Tests\Unit;
 
-use Exception;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Http\Response as LaravelResponse;
 use LaravelBridge\Slim\App;
 use PHPUnit\Framework\TestCase;
-use Recca0120\LaravelBridge\Laravel;
-use Slim\Collection;
 use Slim\Http\Environment;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -22,10 +20,8 @@ class LaravelServiceTest extends TestCase
     {
         $expected = Environment::mock();
 
-        $container = new Laravel();
-
-        $app = new App($container, false);
-        $app->getContainer()->getApp()->instance('environment', $expected);
+        $app = new App(new Container(), false);
+        $app->getContainer()->instance('environment', $expected);
 
         $this->assertSame($expected, $app->getContainer()->get('environment'));
     }
@@ -35,9 +31,7 @@ class LaravelServiceTest extends TestCase
      */
     public function shouldBeOkayWhenTestASimpleRouteWithLaravelService()
     {
-        $container = new Laravel();
-
-        $app = new App($container, false);
+        $app = new App(new Container(), false);
         $app->get('/', function (LaravelRequest $request, $args) {
             return new LaravelResponse('bar');
         });

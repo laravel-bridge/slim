@@ -3,18 +3,21 @@
 namespace LaravelBridge\Slim\Handlers\Strategies;
 
 use Illuminate\Container\Container;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request as LaravelRequest;
+use LaravelBridge\Slim\Traits\HttpTransformerTrait;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class RequestResponse implements InvocationStrategyInterface
 {
+    use HttpTransformerTrait;
+
     /**
-     * @var Container
+     * @var Container|ContainerInterface
      */
     private $container;
 
@@ -39,14 +42,12 @@ class RequestResponse implements InvocationStrategyInterface
         ResponseInterface $response,
         array $routeArguments
     ) {
-        $laravelRequest = (new HttpFoundationFactory)->createRequest($request);
-
-        $this->container->instance(Request::class, $laravelRequest);
+        $this->container->instance(LaravelRequest::class, $this->createLaravelRequest($request));
 
         $response = $this->container->call($callable, [$routeArguments]);
 
-        if ($response instanceof Response) {
-            $response = (new DiactorosFactory)->createResponse($response);
+        if ($response instanceof SymfonyResponse) {
+            return (new DiactorosFactory)->createResponse($response);
         }
 
         return $response;

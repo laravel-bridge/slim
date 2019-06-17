@@ -5,10 +5,10 @@ namespace Tests\Php7\Handlers;
 use Error;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use Illuminate\Container\Container;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\PhpError;
 use PHPUnit\Framework\TestCase;
-use Recca0120\LaravelBridge\Laravel;
 
 class PhpErrorTest extends TestCase
 {
@@ -17,7 +17,7 @@ class PhpErrorTest extends TestCase
      */
     public function shouldGetSymfonyResponseWhenCatchException()
     {
-        $container = (new App(new Laravel()))->getContainer();
+        $container = (new App(new Container()))->getContainer();
         $target = new PhpError($container);
 
         $mockRequest = new ServerRequest('GET', '/');
@@ -33,7 +33,7 @@ class PhpErrorTest extends TestCase
      */
     public function shouldGetJsonResponseWhenRequestExpectJson()
     {
-        $container = (new App(new Laravel()))->getContainer();
+        $container = (new App(new Container()))->getContainer();
         $target = new PhpError($container);
 
         $mockRequest = new ServerRequest('GET', '/', [

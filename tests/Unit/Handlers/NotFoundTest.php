@@ -4,10 +4,10 @@ namespace Tests\Unit\Handlers;
 
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use Illuminate\Container\Container;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\NotFound;
 use PHPUnit\Framework\TestCase;
-use Recca0120\LaravelBridge\Laravel;
 
 class NotFoundTest extends TestCase
 {
@@ -16,7 +16,7 @@ class NotFoundTest extends TestCase
      */
     public function shouldGetSymfonyResponseWhenNotFound()
     {
-        $container = (new App(new Laravel()))->getContainer();
+        $container = (new App(new Container()))->getContainer();
         $target = new NotFound($container);
 
         $mockRequest = new ServerRequest('GET', '/whatever');
@@ -32,7 +32,7 @@ class NotFoundTest extends TestCase
      */
     public function shouldGetJsonResponseWhenRequestExpectJson()
     {
-        $container = (new App(new Laravel()))->getContainer();
+        $container = (new App(new Container()))->getContainer();
         $target = new NotFound($container);
 
         $mockRequest = new ServerRequest('GET', '/whatever', [

@@ -8,8 +8,8 @@ use Illuminate\Http\Request as LaravelRequest;
 use LaravelBridge\Slim\Handlers\Error;
 use LaravelBridge\Slim\Handlers\NotAllowed;
 use LaravelBridge\Slim\Handlers\NotFound;
-use LaravelBridge\Slim\Handlers\Strategies\RequestResponse;
 use LaravelBridge\Slim\Handlers\PhpError;
+use LaravelBridge\Slim\Handlers\Strategies\RequestResponse;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 

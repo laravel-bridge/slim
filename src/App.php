@@ -2,17 +2,22 @@
 
 namespace LaravelBridge\Slim;
 
-use Recca0120\LaravelBridge\Laravel;
+use Illuminate\Contracts\Container\Container;
+use Psr\Container\ContainerInterface;
 use Slim\App as SlimApp;
 
 class App extends SlimApp
 {
     /**
-     * @param Laravel $container
+     * @param Container $container
      * @param bool $useSlimService
      */
-    public function __construct(Laravel $container, $useSlimService = true)
+    public function __construct(Container $container, $useSlimService = true)
     {
+        if (!$container instanceof ContainerInterface) {
+            $container = new ContainerBridge($container);
+        }
+
         if ($useSlimService) {
             (new SlimDefaultServiceProvider($container))->register();
         } else {

@@ -4,12 +4,12 @@ namespace LaravelBridge\Slim\Handlers;
 
 use Exception;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Support\Arr;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Psr7Request;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
@@ -36,7 +36,7 @@ class AbstractHandler
     ];
 
     /**
-     * @var Container
+     * @var Container|ContainerInterface
      */
     protected $container;
 
