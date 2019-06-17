@@ -3,6 +3,7 @@
 namespace LaravelBridge\Slim;
 
 use Illuminate\Contracts\Container\Container;
+use LaravelBridge\Support\ContainerBridge;
 use Psr\Container\ContainerInterface;
 use Slim\App as SlimApp;
 

@@ -46,7 +46,7 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
     protected function registerPhpErrorHandler()
     {
         $this->app->singleton('phpErrorHandler', function () {
-            return new PhpError($this->app->get('settings')['displayErrorDetails']);
+            return new PhpError($this->app);
         });
     }
 

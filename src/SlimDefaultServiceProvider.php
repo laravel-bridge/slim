@@ -51,7 +51,7 @@ class SlimDefaultServiceProvider extends ServiceProvider
     {
         $this->app->singleton('errorHandler', function () {
             return new Error(
-                $this->app->get('settings')['displayErrorDetails']
+                $this->app->make('settings')['displayErrorDetails']
             );
         });
     }
@@ -80,14 +80,14 @@ class SlimDefaultServiceProvider extends ServiceProvider
     protected function registerPhpErrorHandler()
     {
         $this->app->singleton('phpErrorHandler', function () {
-            return new PhpError($this->app->get('settings')['displayErrorDetails']);
+            return new PhpError($this->app->make('settings')['displayErrorDetails']);
         });
     }
 
     protected function registerRequest()
     {
         $this->app->singleton('request', function () {
-            return Request::createFromEnvironment($this->app->get('environment'));
+            return Request::createFromEnvironment($this->app->make('environment'));
         });
     }
 
@@ -96,7 +96,7 @@ class SlimDefaultServiceProvider extends ServiceProvider
         $this->app->singleton('response', function () {
             $headers = new Headers(['Content-Type' => 'text/html; charset=UTF-8']);
             $response = new Response(200, $headers);
-            return $response->withProtocolVersion($this->app->get('settings')['httpVersion']);
+            return $response->withProtocolVersion($this->app->make('settings')['httpVersion']);
         });
     }
 
@@ -104,8 +104,8 @@ class SlimDefaultServiceProvider extends ServiceProvider
     {
         $this->app->singleton('router', function () {
             $routerCacheFile = false;
-            if (isset($this->app->get('settings')['routerCacheFile'])) {
-                $routerCacheFile = $this->app->get('settings')['routerCacheFile'];
+            if (isset($this->app->make('settings')['routerCacheFile'])) {
+                $routerCacheFile = $this->app->make('settings')['routerCacheFile'];
             }
             $router = (new Router())->setCacheFile($routerCacheFile);
             if (method_exists($router, 'setContainer')) {

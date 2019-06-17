@@ -2,9 +2,9 @@
 
 namespace LaravelBridge\Slim\Handlers\Strategies;
 
-use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request as LaravelRequest;
-use LaravelBridge\Slim\Traits\HttpTransformerTrait;
+use LaravelBridge\Support\Traits\IlluminateHttpFactoryAwareTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class RequestResponse implements InvocationStrategyInterface
 {
-    use HttpTransformerTrait;
+    use IlluminateHttpFactoryAwareTrait;
 
     /**
      * @var Container|ContainerInterface
@@ -42,7 +42,7 @@ class RequestResponse implements InvocationStrategyInterface
         ResponseInterface $response,
         array $routeArguments
     ) {
-        $this->container->instance(LaravelRequest::class, $this->createLaravelRequest($request));
+        $this->container->instance(LaravelRequest::class, $this->getIlluminateHttpFactory()->createRequest($request));
 
         $response = $this->container->call($callable, [$routeArguments]);
 

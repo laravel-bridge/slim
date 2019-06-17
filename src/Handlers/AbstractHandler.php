@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Support\Arr;
-use Psr\Container\ContainerInterface;
+use LaravelBridge\Support\Traits\ContainerAwareTrait;
 use Psr\Http\Message\ServerRequestInterface as Psr7Request;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
@@ -26,6 +26,8 @@ use Whoops\Run as Whoops;
 
 class AbstractHandler
 {
+    use ContainerAwareTrait;
+
     /**
      * A list of the internal exception types that should not be reported.
      *
@@ -34,11 +36,6 @@ class AbstractHandler
     protected $internalDontReport = [
         HttpException::class,
     ];
-
-    /**
-     * @var Container|ContainerInterface
-     */
-    protected $container;
 
     /**
      * Create a new exception handler instance.
