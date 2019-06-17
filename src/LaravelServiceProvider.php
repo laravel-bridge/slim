@@ -5,6 +5,7 @@ namespace LaravelBridge\Slim;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use Illuminate\Http\Request as LaravelRequest;
+use Illuminate\Support\Fluent;
 use LaravelBridge\Slim\Handlers\Error;
 use LaravelBridge\Slim\Handlers\NotAllowed;
 use LaravelBridge\Slim\Handlers\NotFound;
@@ -74,6 +75,21 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
             $headers = ['Content-Type' => 'text/html; charset=UTF-8'];
 
             return new Response(200, $headers, null, $this->app->get('settings')['httpVersion']);
+        });
+    }
+
+    protected function registerSetting()
+    {
+        $this->app->singleton('settings', function () {
+            return new Fluent([
+                'httpVersion' => '1.1',
+                'responseChunkSize' => 4096,
+                'outputBuffering' => 'append',
+                'determineRouteBeforeAppMiddleware' => false,
+                'displayErrorDetails' => false,
+                'addContentLengthHeader' => true,
+                'routerCacheFile' => false,
+            ]);
         });
     }
 }
