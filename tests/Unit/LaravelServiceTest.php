@@ -6,38 +6,29 @@ use Illuminate\Container\Container;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Http\Response as LaravelResponse;
 use LaravelBridge\Slim\App;
-use PHPUnit\Framework\TestCase;
-use Slim\Http\Environment;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use LaravelBridge\Slim\Testing\TestCase;
 
 class LaravelServiceTest extends TestCase
 {
     /**
      * @test
      */
-    public function shouldGetTheSameInstanceWhenPresetTheMock()
-    {
-        $expected = Environment::mock();
-
-        $app = new App(new Container(), false);
-        $app->getContainer()->instance('environment', $expected);
-
-        $this->assertSame($expected, $app->getContainer()->get('environment'));
-    }
-
-    /**
-     * @test
-     */
     public function shouldBeOkayWhenTestASimpleRouteWithLaravelService()
     {
+        $actual = $this->call('GET', '/');
+
+        $this->assertSame('bar', (string)$actual->getBody());
+    }
+
+    public function createApplication()
+    {
         $app = new App(new Container(), false);
+        $app->getContainer()->get('settings')->set('displayErrorDetails', true);
+
         $app->get('/', function (LaravelRequest $request, $args) {
             return new LaravelResponse('bar');
         });
 
-        $actual = $app(Request::createFromEnvironment(Environment::mock()), new Response());
-
-        $this->assertSame('bar', (string)$actual->getBody());
+        return $app;
     }
 }
