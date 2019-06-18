@@ -3,6 +3,9 @@
 namespace LaravelBridge\Slim;
 
 use Illuminate\Contracts\Container\Container as ContainerContracts;
+use Illuminate\Support\ServiceProvider;
+use LaravelBridge\Slim\Providers\Laravel\LaravelServiceProvider;
+use LaravelBridge\Slim\Providers\SlimDefaultServiceProvider;
 use LaravelBridge\Support\ContainerBridge;
 use LaravelBridge\Support\Pimple\ServiceProviderBridge;
 use Pimple\ServiceProviderInterface;
@@ -57,7 +60,7 @@ class Container extends ContainerBridge
     /**
      * @param bool $useLaravelService
      * @param array $settings
-     * @return LaravelServiceProvider|SlimDefaultServiceProvider
+     * @return ServiceProvider
      */
     private function createProvider($useLaravelService, $settings = [])
     {
