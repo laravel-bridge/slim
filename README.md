@@ -26,7 +26,7 @@ use LaravelBridge\Slim\App;
 $app = new \LaravelBridge\Slim\App();
 ```
 
-Finally, it will work on most Slim project.
+Finally, it will work on most Slim project. Here has an [example](https://github.com/laravel-bridge/slim-example/tree/using-laravel-bridge) for more detail.
 
 ## Using Laravel Service
 
