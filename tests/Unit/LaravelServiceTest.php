@@ -22,7 +22,7 @@ class LaravelServiceTest extends TestCase
 
     public function createApplication()
     {
-        $app = new App(new Container(), false);
+        $app = new App(new Container(), true);
         $app->getContainer()->get('settings')->set('displayErrorDetails', true);
 
         $app->get('/', function (LaravelRequest $request, $args) {

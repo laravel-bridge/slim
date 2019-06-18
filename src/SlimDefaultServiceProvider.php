@@ -18,6 +18,19 @@ use Slim\Router;
 
 class SlimDefaultServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array
+     */
+    protected $settings = [
+        'httpVersion' => '1.1',
+        'responseChunkSize' => 4096,
+        'outputBuffering' => 'append',
+        'determineRouteBeforeAppMiddleware' => false,
+        'displayErrorDetails' => false,
+        'addContentLengthHeader' => true,
+        'routerCacheFile' => false,
+    ];
+
     public function register()
     {
         $this->registerCallableResolver();
@@ -31,6 +44,17 @@ class SlimDefaultServiceProvider extends ServiceProvider
         $this->registerResponse();
         $this->registerRouter();
         $this->registerSetting();
+    }
+
+    /**
+     * @param array $settings
+     * @return static
+     */
+    public function setSettings(array $settings)
+    {
+        $this->settings = array_merge($this->settings, $settings);
+
+        return $this;
     }
 
     protected function registerCallableResolver()
@@ -118,15 +142,7 @@ class SlimDefaultServiceProvider extends ServiceProvider
     protected function registerSetting()
     {
         $this->singletonIf('settings', function () {
-            return new Collection([
-                'httpVersion' => '1.1',
-                'responseChunkSize' => 4096,
-                'outputBuffering' => 'append',
-                'determineRouteBeforeAppMiddleware' => false,
-                'displayErrorDetails' => false,
-                'addContentLengthHeader' => true,
-                'routerCacheFile' => false,
-            ]);
+            return new Collection($this->settings);
         });
     }
 

@@ -81,15 +81,7 @@ class LaravelServiceProvider extends SlimDefaultServiceProvider
     protected function registerSetting()
     {
         $this->singletonIf('settings', function () {
-            return new Fluent([
-                'httpVersion' => '1.1',
-                'responseChunkSize' => 4096,
-                'outputBuffering' => 'append',
-                'determineRouteBeforeAppMiddleware' => false,
-                'displayErrorDetails' => false,
-                'addContentLengthHeader' => true,
-                'routerCacheFile' => false,
-            ]);
+            return new Fluent($this->settings);
         });
     }
 }

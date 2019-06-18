@@ -17,7 +17,8 @@ class NotAllowedTest extends TestCase
     public function shouldGetSymfonyResponseWhenCallByNotAllowedMethod()
     {
         $container = (new App(new Container()))->getContainer();
-        $container->get('settings')->set('displayErrorDetails', true);
+        $settings = $container->get('settings');
+        $settings['displayErrorDetails'] = true;
 
         $target = new NotAllowed($container);
 
@@ -36,7 +37,8 @@ class NotAllowedTest extends TestCase
     public function shouldGetJsonResponseWhenCallByNotAllowedMethodAndRequestWantsJson()
     {
         $container = (new App(new Container()))->getContainer();
-        $container->get('settings')->set('displayErrorDetails', true);
+        $settings = $container->get('settings');
+        $settings['displayErrorDetails'] = true;
 
         $target = new NotAllowed($container);
 
