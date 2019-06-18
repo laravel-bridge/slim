@@ -11,7 +11,7 @@ class App extends SlimApp
      * @param ContainerContracts|array $container
      * @param bool $useLaravelService
      */
-    public function __construct($container = [], $useLaravelService = true)
+    public function __construct($container = [], $useLaravelService = false)
     {
         parent::__construct(new Container($container, $useLaravelService));
     }
