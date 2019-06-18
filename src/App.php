@@ -2,9 +2,8 @@
 
 namespace LaravelBridge\Slim;
 
-use Illuminate\Container\Container;
+use Illuminate\Container\Container as IlluminateContainer;
 use Illuminate\Contracts\Container\Container as ContainerContracts;
-use LaravelBridge\Support\ContainerBridge;
 use Psr\Container\ContainerInterface;
 use Slim\App as SlimApp;
 
@@ -20,8 +19,8 @@ class App extends SlimApp
             $container = $this->buildContainer($container);
         }
 
-        if (!$container instanceof ContainerInterface) {
-            $container = new ContainerBridge($container);
+        if (!$container instanceof Container) {
+            $container = new Container($container);
         }
 
         if ($useSlimService) {
