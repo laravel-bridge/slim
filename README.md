@@ -1,7 +1,7 @@
 # Laravel Bridge for Slim Framework
 
 [![Build Status](https://travis-ci.com/laravel-bridge/slim.svg?branch=master)](https://travis-ci.com/laravel-bridge/slim)
-[![Coverage Status](https://coveralls.io/repos/github/laravel-bridge/slim/badge.svg?branch=master)](https://coveralls.io/github/laravel-bridge/slim?branch=master)
+[![codecov](https://codecov.io/gh/laravel-bridge/slim/branch/master/graph/badge.svg)](https://codecov.io/gh/laravel-bridge/slim)
 [![Latest Stable Version](https://poser.pugx.org/laravel-bridge/slim/v/stable)](https://packagist.org/packages/laravel-bridge/slim)
 [![Total Downloads](https://poser.pugx.org/laravel-bridge/slim/downloads)](https://packagist.org/packages/laravel-bridge/slim)
 [![License](https://poser.pugx.org/laravel-bridge/slim/license)](https://packagist.org/packages/laravel-bridge/slim)

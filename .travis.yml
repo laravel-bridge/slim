@@ -23,7 +23,7 @@ script:
   - php vendor/bin/phpunit
 
 after_success:
-  - if [[ "7.2" == "${TRAVIS_PHP_VERSION}" ]]; then travis_retry php vendor/bin/php-coveralls -v ; fi
+  - if [[ "7.3" == "${TRAVIS_PHP_VERSION}" ]]; then bash <(curl -s https://codecov.io/bash) ; fi
 
 cache:
   directories:
