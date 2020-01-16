@@ -18,7 +18,7 @@ class ContainerBuilderTest extends TestCase
      */
     public function shouldGetLaravelInstanceWhenSetTheHandler()
     {
-        $target = (new ContainerBuilder)
+        $target = (new ContainerBuilder())
             ->useLaravelErrorHandler()
             ->useLaravelNotFoundHandler()
             ->build();
@@ -45,7 +45,7 @@ class ContainerBuilderTest extends TestCase
             'routerCacheFile' => false,
         ];
 
-        $target = (new ContainerBuilder)
+        $target = (new ContainerBuilder())
             ->setSettings(['displayErrorDetails' => true])
             ->build();
 
@@ -68,7 +68,7 @@ class ContainerBuilderTest extends TestCase
             'routerCacheFile' => false,
         ];
 
-        $target = (new ContainerBuilder)
+        $target = (new ContainerBuilder())
             ->useLaravelSettings(['displayErrorDetails' => true])
             ->build();
 

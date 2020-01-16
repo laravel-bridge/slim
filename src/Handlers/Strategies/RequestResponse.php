@@ -47,7 +47,7 @@ class RequestResponse implements InvocationStrategyInterface
         $response = $this->container->call($callable, [$routeArguments]);
 
         if ($response instanceof SymfonyResponse) {
-            return (new DiactorosFactory)->createResponse($response);
+            return (new DiactorosFactory())->createResponse($response);
         }
 
         return $response;

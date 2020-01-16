@@ -22,7 +22,7 @@ class PhpErrorTest extends TestCase
 
         $mockRequest = new ServerRequest('GET', '/');
 
-        $response = $target($mockRequest, new Response(), new Error);
+        $response = $target($mockRequest, new Response(), new Error());
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertContains('Whoops, looks like something went wrong.', (string)$response->getBody());
@@ -40,7 +40,7 @@ class PhpErrorTest extends TestCase
             'ACCEPT' => 'application/json',
         ]);
 
-        $response = $target($mockRequest, new Response(), new Error);
+        $response = $target($mockRequest, new Response(), new Error());
 
         $this->assertSame(500, $response->getStatusCode());
         $this->assertJson((string)$response->getBody());

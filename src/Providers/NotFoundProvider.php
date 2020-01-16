@@ -10,7 +10,7 @@ class NotFoundProvider extends ServiceProvider
     public function register()
     {
         $this->app->bindIf('notFoundHandler', function () {
-            return new NotFound;
+            return new NotFound();
         }, true);
     }
 }

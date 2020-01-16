@@ -200,8 +200,8 @@ class AbstractHandler
      */
     private function renderExceptionWithWhoops(Exception $e)
     {
-        return tap(new Whoops, function (Whoops $whoops) {
-            $whoops->pushHandler(new PrettyPageHandler);
+        return tap(new Whoops(), function (Whoops $whoops) {
+            $whoops->pushHandler(new PrettyPageHandler());
             $whoops->writeToOutput(false);
             $whoops->allowQuit(false);
         })->handleException($e);

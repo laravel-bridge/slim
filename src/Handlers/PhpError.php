@@ -30,7 +30,7 @@ class PhpError extends AbstractHandler
             return $this->renderSlimPhpError($request, $response, $exception);
         }
 
-        return (new DiactorosFactory)->createResponse($laravelResponse);
+        return (new DiactorosFactory())->createResponse($laravelResponse);
     }
 
     /**

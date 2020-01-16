@@ -10,7 +10,7 @@ class NotAllowedProvider extends ServiceProvider
     public function register()
     {
         $this->app->bindIf('notAllowedHandler', function () {
-            return new NotAllowed;
+            return new NotAllowed();
         }, true);
     }
 }

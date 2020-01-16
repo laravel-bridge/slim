@@ -10,7 +10,7 @@ class PhpErrorHandlerProvider extends ServiceProvider
     public function register()
     {
         $this->app->bindIf('phpErrorHandler', function () {
-            return new PhpError;
+            return new PhpError();
         }, true);
     }
 }

@@ -10,7 +10,7 @@ class FoundHandlerProvider extends ServiceProvider
     public function register()
     {
         $this->app->bindIf('foundHandler', function () {
-            return new RequestResponse;
+            return new RequestResponse();
         }, true);
     }
 }

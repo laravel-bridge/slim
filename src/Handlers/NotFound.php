@@ -19,12 +19,15 @@ class NotFound extends AbstractHandler
     public function __invoke(Psr7Request $request, Psr7Response $response)
     {
         try {
-            $laravelResponse = $this->render($this->createLaravelRequestFromPsr7($request), new NotFoundHttpException);
+            $laravelResponse = $this->render(
+                $this->createLaravelRequestFromPsr7($request),
+                new NotFoundHttpException()
+            );
         } catch (Exception $ex) {
             return $this->renderUsingSlimNotFound($request, $response);
         }
 
-        return (new DiactorosFactory)->createResponse($laravelResponse);
+        return (new DiactorosFactory())->createResponse($laravelResponse);
     }
 
     /**

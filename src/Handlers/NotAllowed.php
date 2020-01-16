@@ -27,7 +27,7 @@ class NotAllowed extends AbstractHandler
             return $this->renderSlimNotAllowed($request, $response, $methods);
         }
 
-        return (new DiactorosFactory)->createResponse($laravelResponse);
+        return (new DiactorosFactory())->createResponse($laravelResponse);
     }
 
     /**

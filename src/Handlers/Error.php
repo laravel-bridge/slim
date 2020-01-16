@@ -26,7 +26,7 @@ class Error extends AbstractHandler
             return $this->renderExceptionWithSlim($request, $response, $exception);
         }
 
-        return (new DiactorosFactory)->createResponse($laravelResponse);
+        return (new DiactorosFactory())->createResponse($laravelResponse);
     }
 
     /**
