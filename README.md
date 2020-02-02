@@ -1,10 +1,14 @@
-# Laravel Bridge for Slim Framework
+<p align="center"><img src="docs/logo.svg"></p>
 
-[![Build Status](https://travis-ci.com/laravel-bridge/slim.svg?branch=master)](https://travis-ci.com/laravel-bridge/slim)
-[![codecov](https://codecov.io/gh/laravel-bridge/slim/branch/master/graph/badge.svg)](https://codecov.io/gh/laravel-bridge/slim)
-[![Latest Stable Version](https://poser.pugx.org/laravel-bridge/slim/v/stable)](https://packagist.org/packages/laravel-bridge/slim)
-[![Total Downloads](https://poser.pugx.org/laravel-bridge/slim/downloads)](https://packagist.org/packages/laravel-bridge/slim)
-[![License](https://poser.pugx.org/laravel-bridge/slim/license)](https://packagist.org/packages/laravel-bridge/slim)
+<h1 align="center">Laravel Bridge for Slim Framework</h1>
+
+<p align="center">
+<a href="https://travis-ci.com/laravel-bridge/slim"><img src="https://travis-ci.com/laravel-bridge/slim.svg?branch=master" alt="Build Status"></a>
+<a href="https://codecov.io/gh/laravel-bridge/slim"><img src="https://codecov.io/gh/laravel-bridge/slim/branch/master/graph/badge.svg" alt="codecov"></a>
+<a href="https://packagist.org/packages/laravel-bridge/slim"><img src="https://poser.pugx.org/laravel-bridge/slim/v/stable" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel-bridge/slim"><img src="https://poser.pugx.org/laravel-bridge/slim/downloads" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel-bridge/slim"><img src="https://poser.pugx.org/laravel-bridge/slim/license" alt="License"></a>
+</p>
 
 The bridge for Laravel in Slim framework
 
