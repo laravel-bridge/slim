@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelBridge\Slim;
 
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\Container as ContainerContract;
 use Illuminate\Support\ServiceProvider;
 use LaravelBridge\Slim\Providers\BaseProvider;
 use LaravelBridge\Slim\Providers\ErrorHandlerProvider;
@@ -42,9 +43,9 @@ class ContainerBuilder
     ];
 
     /**
-     * @return Container
+     * @return ContainerContract
      */
-    public function build()
+    public function build(): ContainerContract
     {
         $container = new Container();
 
@@ -59,7 +60,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelAllHandler()
+    public function useLaravelAllHandler(): ContainerBuilder
     {
         $this->useLaravelErrorHandler();
         $this->useLaravelFoundHandler();
@@ -73,7 +74,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelErrorHandler()
+    public function useLaravelErrorHandler(): ContainerBuilder
     {
         $this->providers['error'] = LaravelErrorHandlerProvider::class;
 
@@ -83,7 +84,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelFoundHandler()
+    public function useLaravelFoundHandler(): ContainerBuilder
     {
         $this->providers['found'] = LaravelFoundHandlerProvider::class;
 
@@ -93,7 +94,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelHttp()
+    public function useLaravelHttp(): ContainerBuilder
     {
         $this->providers['http'] = LaravelHttpProvider::class;
 
@@ -103,7 +104,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelNotAllowedHandler()
+    public function useLaravelNotAllowedHandler(): ContainerBuilder
     {
         $this->providers['notAllowed'] = LaravelNotAllowedProvider::class;
 
@@ -113,7 +114,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelNotFoundHandler()
+    public function useLaravelNotFoundHandler(): ContainerBuilder
     {
         $this->providers['notFound'] = LaravelNotFoundProvider::class;
 
@@ -123,7 +124,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelPhpErrorHandler()
+    public function useLaravelPhpErrorHandler(): ContainerBuilder
     {
         $this->providers['phpError'] = LaravelPhpErrorHandlerProvider::class;
 
@@ -134,7 +135,7 @@ class ContainerBuilder
      * @param array $settings
      * @return static
      */
-    public function useLaravelSettings($settings = [])
+    public function useLaravelSettings($settings = []): ContainerBuilder
     {
         $this->providers['settings'] = LaravelSettingsProvider::class;
 
@@ -145,10 +146,10 @@ class ContainerBuilder
 
     /**
      * @param string $class
-     * @param Container $container
+     * @param ContainerContract $container
      * @return ServiceProvider
      */
-    private function resolveProvider($class, $container)
+    private function resolveProvider($class, $container): ServiceProvider
     {
         $provider = new $class($container);
 

@@ -22,31 +22,28 @@ class App extends SlimApp
         if ($container instanceof ContainerContracts) {
             parent::__construct($container);
 
-            $this->createProvider($container, $useLaravelService)->register();
+            $services = [];
         } else {
-            $values = $container;
-            $container = new Container();
+            parent::__construct(new Container());
 
-            parent::__construct($container);
-
-            $this->provisionService($container, $values);
-
-            $this->createProvider(
-                $container,
-                $useLaravelService,
-                $this->resolveSettings($container, $values)
-            )->register();
+            $services = $container;
         }
+
+        $this->provisionService($services);
+
+        $this->createProvider($useLaravelService, $this->resolveSettings($services))->register();
     }
 
     /**
-     * @param ContainerContracts $container
      * @param bool $useLaravelService
      * @param array $settings
      * @return ServiceProvider
      */
-    private function createProvider(ContainerContracts $container, $useLaravelService, $settings = [])
+    private function createProvider($useLaravelService, $settings = []): ServiceProvider
     {
+        /** @var ContainerContracts $container */
+        $container = $this->getContainer();
+
         if ($useLaravelService) {
             $provider = new LaravelServiceProvider($container);
         } else {
@@ -59,11 +56,13 @@ class App extends SlimApp
     }
 
     /**
-     * @param ContainerContracts $container
      * @param array $services
      */
-    private function provisionService(ContainerContracts $container, array $services)
+    private function provisionService(array $services): void
     {
+        /** @var ContainerContracts $container */
+        $container = $this->getContainer();
+
         foreach ($services as $abstract => $concrete) {
             if ('settings' === $abstract && is_array($concrete)) {
                 continue;
@@ -78,14 +77,16 @@ class App extends SlimApp
     }
 
     /**
-     * @param ContainerContracts $container
      * @param mixed $values
      * @return array
      */
-    private function resolveSettings(ContainerContracts $container, $values)
+    private function resolveSettings($values): array
     {
+        /** @var ContainerContracts $container */
+        $container = $this->getContainer();
+
         if (isset($values['settings']) && is_array($values['settings'])) {
-            return array_merge($container->settings, $values['settings']);
+            return array_merge($container['settings'], $values['settings']);
         }
 
         return [];
