@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace LaravelBridge\Slim\Testing\Concerns;
 
-use GuzzleHttp\Psr7\ServerRequest;
+use Illuminate\Support\Str;
 use LaravelBridge\Support\Traits\ContainerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 trait MakesHttpRequests
 {
@@ -42,9 +44,29 @@ trait MakesHttpRequests
         $server = [],
         $content = null
     ) {
-        return (new ServerRequest($method, $uri, [], $content, '1.1', $server))
-            ->withQueryParams($parameters)
-            ->withCookieParams($cookies)
-            ->withUploadedFiles($files);
+        $symfonyRequest = SymfonyRequest::create(
+            $this->prepareUrlForRequest($uri),
+            $method,
+            $parameters,
+            $cookies,
+            $files,
+            $server,
+            $content
+        );
+
+        return (new DiactorosFactory())->createRequest($symfonyRequest);
+    }
+
+    protected function prepareUrlForRequest(string $uri): string
+    {
+        if (Str::startsWith($uri, '/')) {
+            $uri = substr($uri, 1);
+        }
+
+        if (!Str::startsWith($uri, 'http')) {
+            $uri = 'http://localhost:8080/' . $uri;
+        }
+
+        return trim($uri, '/');
     }
 }
