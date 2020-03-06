@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LaravelBridge\Slim\Testing\Concerns;
 
 use GuzzleHttp\Psr7\ServerRequest;
