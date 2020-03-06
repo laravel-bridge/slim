@@ -26,7 +26,7 @@ class AppTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeOkayWhenTestASimpleRoute()
+    public function shouldBeOkayWhenTestASimpleRoute(): void
     {
         $actual = $this->call('GET', '/');
 
@@ -36,7 +36,7 @@ class AppTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetTheSameInstanceWhenPresetTheMock()
+    public function shouldGetTheSameInstanceWhenPresetTheMock(): void
     {
         $expected = Environment::mock();
 
@@ -49,7 +49,7 @@ class AppTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetTheSameInstanceWhenPresetTheMockUsingArray()
+    public function shouldGetTheSameInstanceWhenPresetTheMockUsingArray(): void
     {
         $expected = Environment::mock();
 
@@ -71,7 +71,7 @@ class AppTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeOkayWhenUsingReadyContainer()
+    public function shouldBeOkayWhenUsingReadyContainer(): void
     {
         $container = (new ContainerBuilder())
             ->useLaravelFoundHandler()

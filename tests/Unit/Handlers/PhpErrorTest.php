@@ -15,7 +15,7 @@ class PhpErrorTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetSymfonyResponseWhenCatchException()
+    public function shouldGetSymfonyResponseWhenCatchException(): void
     {
         $container = (new App(new Container()))->getContainer();
         $target = new PhpError($container);
@@ -31,7 +31,7 @@ class PhpErrorTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetJsonResponseWhenRequestExpectJson()
+    public function shouldGetJsonResponseWhenRequestExpectJson(): void
     {
         $container = (new App(new Container()))->getContainer();
         $target = new PhpError($container);

@@ -16,7 +16,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetLaravelInstanceWhenSetTheHandler()
+    public function shouldGetLaravelInstanceWhenSetTheHandler(): void
     {
         $target = (new ContainerBuilder())
             ->useLaravelErrorHandler()
@@ -33,7 +33,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
-    public function shouldReplaceDefaultSettings()
+    public function shouldReplaceDefaultSettings(): void
     {
         $expected = [
             'httpVersion' => '1.1',
@@ -56,7 +56,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
-    public function shouldReplaceDefaultSettingsUsingLaravelFluent()
+    public function shouldReplaceDefaultSettingsUsingLaravelFluent(): void
     {
         $expected = [
             'httpVersion' => '1.1',

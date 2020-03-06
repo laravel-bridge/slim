@@ -15,7 +15,7 @@ class ErrorTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetSymfonyResponseWhenCatchException()
+    public function shouldGetSymfonyResponseWhenCatchException(): void
     {
         $container = (new App(new Container()))->getContainer();
         $target = new Error($container);

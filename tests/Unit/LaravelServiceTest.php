@@ -13,7 +13,7 @@ class LaravelServiceTest extends TestCase
     /**
      * @test
      */
-    public function shouldBeOkayWhenTestASimpleRouteWithLaravelService()
+    public function shouldBeOkayWhenTestASimpleRouteWithLaravelService(): void
     {
         $actual = $this->call('GET', '/');
 

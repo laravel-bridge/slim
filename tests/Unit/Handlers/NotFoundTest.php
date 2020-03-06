@@ -14,7 +14,7 @@ class NotFoundTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetSymfonyResponseWhenNotFound()
+    public function shouldGetSymfonyResponseWhenNotFound(): void
     {
         $container = (new App(new Container()))->getContainer();
         $target = new NotFound($container);
