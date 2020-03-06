@@ -16,21 +16,21 @@ class BaseProvider extends ServiceProvider
         $this->registerRouter();
     }
 
-    protected function registerCallableResolver()
+    private function registerCallableResolver()
     {
         $this->app->bindIf('callableResolver', function () {
             return new CallableResolver($this->app);
         }, true);
     }
 
-    protected function registerEnvironment()
+    private function registerEnvironment()
     {
         $this->app->bindIf('environment', function () {
             return new Environment($_SERVER);
         }, true);
     }
 
-    protected function registerRouter()
+    private function registerRouter()
     {
         $this->app->bindIf('router', function () {
             $routerCacheFile = false;

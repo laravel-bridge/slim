@@ -20,6 +20,8 @@ class HttpProvider extends ServiceProvider
         $this->app->bindIf('request', function () {
             return Request::createFromEnvironment($this->app->make('environment'));
         }, true);
+
+        $this->app->bind(Request::class, 'request');
     }
 
     protected function registerResponse()
@@ -29,5 +31,7 @@ class HttpProvider extends ServiceProvider
             $response = new Response(200, $headers);
             return $response->withProtocolVersion($this->app->make('settings')['httpVersion']);
         }, true);
+
+        $this->app->bind(Response::class, 'response', true);
     }
 }
