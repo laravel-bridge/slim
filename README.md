@@ -43,7 +43,7 @@ $app = new App([], true);
 If you want to use some of Laravel service, use the [`ContainerBuilder`](/src/ContainerBuilder.php).
 
 ```php
-$container = (new ContainerBuilder)
+$container = (new ContainerBuilder())
     ->useLaravelErrorHandler()
     ->useLaravelNotFoundHandler()
     ->build();
@@ -58,7 +58,7 @@ The `foundHandler` in Slim is invoke when the route found.
 This bridge implements a auto injection handler like Laravel, names [`RequestResponse`](/src/Handlers/Strategies/RequestResponse.php). Use Laravel Service or call `ContainerBuilder::useLaravelFoundHandler()` can enable handler.
 
 ```php
-$container = (new ContainerBuilder)
+$container = (new ContainerBuilder())
     ->useLaravelFoundHandler()
     ->build();
 

@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 use LaravelBridge\Slim\App;
+use LaravelBridge\Slim\ContainerBuilder;
 use LaravelBridge\Slim\Testing\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Environment;
@@ -65,5 +66,19 @@ class AppTest extends TestCase
         $this->assertSame($expected, $actual->get('environment'));
         $this->assertInstanceOf(stdClass::class, $actual->get('obj'));
         $this->assertSame($actual->get('request'), $actual->get(ServerRequestInterface::class));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenUsingReadyContainer()
+    {
+        $container = (new ContainerBuilder())
+            ->useLaravelFoundHandler()
+            ->build();
+
+        $target = new App($container);
+
+        $this->assertInstanceOf(App::class, $target);
     }
 }

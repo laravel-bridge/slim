@@ -2,7 +2,7 @@
 
 namespace LaravelBridge\Slim;
 
-use Illuminate\Container\Container as LaravelContainer;
+use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use LaravelBridge\Slim\Providers\BaseProvider;
 use LaravelBridge\Slim\Providers\ErrorHandlerProvider;
@@ -44,14 +44,14 @@ class ContainerBuilder
      */
     public function build()
     {
-        $container = new LaravelContainer();
+        $container = new Container();
 
         foreach ($this->providers as $provider) {
             $provider = $this->resolveProvider($provider, $container);
             $provider->register();
         }
 
-        return new Container($container);
+        return $container;
     }
 
     /**
@@ -143,7 +143,7 @@ class ContainerBuilder
 
     /**
      * @param string $class
-     * @param LaravelContainer $container
+     * @param Container $container
      * @return ServiceProvider
      */
     private function resolveProvider($class, $container)

@@ -4,7 +4,6 @@ namespace LaravelBridge\Slim\Testing;
 
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\Facade;
-use LaravelBridge\Support\ContainerBridge;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Slim\App;
 
@@ -53,13 +52,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function resolveContainer()
     {
-        $container = $this->app->getContainer();
-
-        if ($container instanceof ContainerBridge) {
-            $container = $container->getContainer();
-        }
-
-        return $container;
+        return $this->app->getContainer();
     }
 
     /**

@@ -10,15 +10,16 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": "^7.1",
         "ext-json": "*",
         "guzzlehttp/psr7": "^1.5",
-        "illuminate/container": "^5.2",
-        "illuminate/http": "^5.2",
-        "illuminate/support": "^5.2",
-        "laravel-bridge/support": "~0.0.3",
+        "illuminate/container": "^5.5 | ^6 | ^7",
+        "illuminate/http": "^5.5 | ^6 | ^7",
+        "illuminate/support": "^5.5 | ^6 | ^7",
+        "laravel-bridge/support": "~0.1",
         "psr/container": "^1.0",
         "slim/slim": "^3.0",
+        "symfony/debug": "^4.4 | ^5",
         "symfony/psr-http-message-bridge": "^1",
         "zendframework/zend-diactoros": "^1"
     },

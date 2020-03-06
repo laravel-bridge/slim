@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-.PHONY: clean clean-all test coverage
+.PHONY: all clean clean-all test coverage
 
 # ---------------------------------------------------------------------
 
