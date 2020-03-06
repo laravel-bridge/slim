@@ -71,4 +71,4 @@ $app->get('/', function (IlluminateRequest $request, $args) {
 
 ### `settings`
 
-Slim use the `Collection` class, Laravel Bridge use the `Fluent` class.
+Slim use the `Collection` class, Laravel Bridge use the `Illuminate\Config\Repository` class.

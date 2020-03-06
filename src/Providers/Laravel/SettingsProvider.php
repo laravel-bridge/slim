@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LaravelBridge\Slim\Providers\Laravel;
 
-use Illuminate\Support\Fluent;
+use Illuminate\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 use LaravelBridge\Slim\Providers\SettingsAwareTrait;
 
@@ -15,7 +15,7 @@ class SettingsProvider extends ServiceProvider
     public function register()
     {
         $this->app->bindIf('settings', function () {
-            return new Fluent($this->settings);
+            return new Repository($this->settings);
         }, true);
     }
 }

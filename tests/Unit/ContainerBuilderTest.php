@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Support\Fluent;
+use Illuminate\Config\Repository;
 use LaravelBridge\Slim\ContainerBuilder;
 use LaravelBridge\Slim\Handlers\Error as LaravelError;
 use LaravelBridge\Slim\Handlers\NotFound as LaravelNotFound;
@@ -72,7 +72,7 @@ class ContainerBuilderTest extends TestCase
             ->useLaravelSettings(['displayErrorDetails' => true])
             ->build();
 
-        $this->assertInstanceOf(Fluent::class, $target->get('settings'));
-        $this->assertSame($expected, $target->get('settings')->toArray());
+        $this->assertInstanceOf(Repository::class, $target->get('settings'));
+        $this->assertSame($expected, $target->get('settings')->all());
     }
 }
