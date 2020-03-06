@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Container\Container as IlluminateContainer;
 use Illuminate\Support\Fluent;
 use LaravelBridge\Slim\Container;
 use PHPUnit\Framework\TestCase;
