@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace LaravelBridge\Slim;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Container\Container as ContainerContract;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Config\Repository;
+use LaravelBridge\Scratch\Application;
 use LaravelBridge\Slim\Providers\BaseProvider;
 use LaravelBridge\Slim\Providers\ErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\FoundHandlerProvider;
@@ -17,12 +16,11 @@ use LaravelBridge\Slim\Providers\Laravel\HttpProvider as LaravelHttpProvider;
 use LaravelBridge\Slim\Providers\Laravel\NotAllowedProvider as LaravelNotAllowedProvider;
 use LaravelBridge\Slim\Providers\Laravel\NotFoundProvider as LaravelNotFoundProvider;
 use LaravelBridge\Slim\Providers\Laravel\PhpErrorHandlerProvider as LaravelPhpErrorHandlerProvider;
-use LaravelBridge\Slim\Providers\Laravel\SettingsProvider as LaravelSettingsProvider;
 use LaravelBridge\Slim\Providers\NotAllowedProvider;
 use LaravelBridge\Slim\Providers\NotFoundProvider;
 use LaravelBridge\Slim\Providers\PhpErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\SettingsAwareTrait;
-use LaravelBridge\Slim\Providers\SettingsProvider;
+use Slim\Collection;
 
 class ContainerBuilder
 {
@@ -39,20 +37,24 @@ class ContainerBuilder
         'notAllowed' => NotAllowedProvider::class,
         'notFound' => NotFoundProvider::class,
         'phpError' => PhpErrorHandlerProvider::class,
-        'settings' => SettingsProvider::class,
     ];
 
+    private $useLaravelSetting = false;
+
     /**
-     * @return ContainerContract
+     * @return Application
      */
-    public function build(): ContainerContract
+    public function build(): Application
     {
-        $container = new Container();
+        $container = new Application();
 
         foreach ($this->providers as $provider) {
-            $provider = $this->resolveProvider($provider, $container);
-            $provider->register();
+            $container->setupProvider($provider);
         }
+
+        $this->registerSettingProvider($container);
+
+        $container->setupConfig('settings', $this->settings);
 
         return $container;
     }
@@ -67,6 +69,8 @@ class ContainerBuilder
         $this->useLaravelNotAllowedHandler();
         $this->useLaravelNotFoundHandler();
         $this->useLaravelPhpErrorHandler();
+        $this->useLaravelHttp();
+        $this->useLaravelSettings();
 
         return $this;
     }
@@ -132,31 +136,21 @@ class ContainerBuilder
     }
 
     /**
-     * @param array $settings
      * @return static
      */
-    public function useLaravelSettings($settings = []): ContainerBuilder
+    public function useLaravelSettings(): ContainerBuilder
     {
-        $this->providers['settings'] = LaravelSettingsProvider::class;
-
-        $this->setSettings($settings);
+        $this->useLaravelSetting = true;
 
         return $this;
     }
 
-    /**
-     * @param string $class
-     * @param ContainerContract $container
-     * @return ServiceProvider
-     */
-    private function resolveProvider($class, $container): ServiceProvider
+    private function registerSettingProvider(Application $container): void
     {
-        $provider = new $class($container);
-
-        if (method_exists($provider, 'setSettings')) {
-            $provider->setSettings($this->settings);
+        if ($this->useLaravelSetting) {
+            $container->instance('settings', new Repository($this->settings));
+        } else {
+            $container->instance('settings', new Collection($this->settings));
         }
-
-        return $provider;
     }
 }

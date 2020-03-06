@@ -58,7 +58,7 @@ class AppTest extends TestCase
             'obj' => stdClass::class,
             ServerRequestInterface::class => function (ContainerContract $app) {
                 return $app->make('request');
-            }
+            },
         ];
 
         $actual = (new App($container, false))->getContainer();
@@ -75,7 +75,8 @@ class AppTest extends TestCase
     {
         $container = (new ContainerBuilder())
             ->useLaravelFoundHandler()
-            ->build();
+            ->build()
+            ->bootstrap();
 
         $target = new App($container);
 

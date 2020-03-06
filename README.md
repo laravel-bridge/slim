@@ -26,7 +26,7 @@ Replace class name `Slim\App` to bridge class [`LaravelBridge\Slim\App`](/src/Ap
 // Rename use class
 use LaravelBridge\Slim\App;
 
-// Or rename new instace class
+// Or rename new instance class
 $app = new \LaravelBridge\Slim\App();
 ```
 
@@ -40,13 +40,19 @@ Finally, it will work on most Slim project. Here has an [example](https://github
 $app = new App([], true);
 ```
 
-If you want to use some of Laravel service, use the [`ContainerBuilder`](/src/ContainerBuilder.php).
+If you want to use some of Laravel service, use the [`ContainerBuilder`](/src/ContainerBuilder.php). The builder will build an instance of [Scratch Application](https://github.com/laravel-bridge/scratch).
 
 ```php
+// Container is an instance of Scratch Application
 $container = (new ContainerBuilder())
     ->useLaravelErrorHandler()
     ->useLaravelNotFoundHandler()
     ->build();
+
+// Use container as Scratch Application
+$container->setupDatabase($conncetion)
+    ->setupProvider(YourProvider::class)
+    ->bootstrap();
 
 $app = new App($container);
 ```

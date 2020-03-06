@@ -21,7 +21,8 @@ class ContainerBuilderTest extends TestCase
         $target = (new ContainerBuilder())
             ->useLaravelErrorHandler()
             ->useLaravelNotFoundHandler()
-            ->build();
+            ->build()
+            ->bootstrap();
 
         $this->assertInstanceOf(LaravelError::class, $target->get('errorHandler'));
         $this->assertInstanceOf(LaravelNotFound::class, $target->get('notFoundHandler'));
@@ -47,7 +48,8 @@ class ContainerBuilderTest extends TestCase
 
         $target = (new ContainerBuilder())
             ->setSettings(['displayErrorDetails' => true])
-            ->build();
+            ->build()
+            ->bootstrap();
 
         $this->assertInstanceOf(Collection::class, $target->get('settings'));
         $this->assertSame($expected, $target->get('settings')->all());
@@ -56,7 +58,7 @@ class ContainerBuilderTest extends TestCase
     /**
      * @test
      */
-    public function shouldReplaceDefaultSettingsUsingLaravelFluent(): void
+    public function shouldReplaceDefaultSettingsUsingLaravelConfigRepository(): void
     {
         $expected = [
             'httpVersion' => '1.1',
@@ -69,8 +71,10 @@ class ContainerBuilderTest extends TestCase
         ];
 
         $target = (new ContainerBuilder())
-            ->useLaravelSettings(['displayErrorDetails' => true])
-            ->build();
+            ->setSettings(['displayErrorDetails' => true])
+            ->useLaravelSettings()
+            ->build()
+            ->bootstrap();
 
         $this->assertInstanceOf(Repository::class, $target->get('settings'));
         $this->assertSame($expected, $target->get('settings')->all());
