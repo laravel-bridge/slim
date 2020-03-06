@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface as Psr7Request;
 use Slim\Handlers\NotFound as SlimNotFound;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NotFound extends AbstractHandler
@@ -29,7 +30,7 @@ class NotFound extends AbstractHandler
             return $this->renderUsingSlimNotFound($request, $response);
         }
 
-        return (new DiactorosFactory())->createResponse($laravelResponse);
+        return $this->getContainer()->make(PsrHttpFactory::class)->createResponse($laravelResponse);
     }
 
     /**

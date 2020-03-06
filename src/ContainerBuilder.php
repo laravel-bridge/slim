@@ -9,6 +9,7 @@ use LaravelBridge\Scratch\Application;
 use LaravelBridge\Slim\Providers\BaseProvider;
 use LaravelBridge\Slim\Providers\ErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\FoundHandlerProvider;
+use LaravelBridge\Slim\Providers\HttpFactoryProvider;
 use LaravelBridge\Slim\Providers\HttpProvider;
 use LaravelBridge\Slim\Providers\Laravel\ErrorHandlerProvider as LaravelErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\Laravel\FoundHandlerProvider as LaravelFoundHandlerProvider;
@@ -47,6 +48,8 @@ class ContainerBuilder
     public function build(): Application
     {
         $container = new Application();
+
+        $container->setupProvider(HttpFactoryProvider::class);
 
         foreach ($this->providers as $provider) {
             $container->setupProvider($provider);

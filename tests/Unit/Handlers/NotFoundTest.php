@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Handlers;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\ServerRequest;
 use Illuminate\Container\Container;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequest;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\NotFound;
 use PHPUnit\Framework\TestCase;
@@ -19,12 +19,13 @@ class NotFoundTest extends TestCase
         $container = (new App(new Container()))->getContainer();
         $target = new NotFound($container);
 
-        $mockRequest = new ServerRequest('GET', '/whatever');
+        $mockRequest = new ServerRequest([], [], '/whatever', 'GET');
 
         $response = $target($mockRequest, new Response());
+        $body = (string)$response->getBody();
 
         $this->assertSame(404, $response->getStatusCode());
-        $this->assertContains('Sorry, the page you are looking for could not be found.', (string)$response->getBody());
+        $this->assertStringContainsString('Sorry, the page you are looking for could not be found.', $body);
     }
 
     /**
@@ -35,9 +36,8 @@ class NotFoundTest extends TestCase
         $container = (new App(new Container()))->getContainer();
         $target = new NotFound($container);
 
-        $mockRequest = new ServerRequest('GET', '/whatever', [
-            'ACCEPT' => 'application/json',
-        ]);
+        $mockRequest = new ServerRequest([], [], '/whatever', 'GET');
+        $mockRequest = $mockRequest->withHeader('ACCEPT', 'application/json');
 
         $response = $target($mockRequest, new Response());
 

@@ -8,7 +8,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface as Psr7Request;
 use Slim\Handlers\NotAllowed as SlimNotAllowed;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class NotAllowed extends AbstractHandler
@@ -29,7 +29,7 @@ class NotAllowed extends AbstractHandler
             return $this->renderSlimNotAllowed($request, $response, $methods);
         }
 
-        return (new DiactorosFactory())->createResponse($laravelResponse);
+        return $this->getContainer()->make(PsrHttpFactory::class)->createResponse($laravelResponse);
     }
 
     /**

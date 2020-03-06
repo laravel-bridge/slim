@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace LaravelBridge\Slim\Testing\Concerns;
 
 use Illuminate\Support\Str;
+use Laminas\Diactoros\ResponseFactory;
+use Laminas\Diactoros\ServerRequestFactory;
+use Laminas\Diactoros\StreamFactory;
+use Laminas\Diactoros\UploadedFileFactory;
 use LaravelBridge\Support\Traits\ContainerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 trait MakesHttpRequests
@@ -54,7 +58,14 @@ trait MakesHttpRequests
             $content
         );
 
-        return (new DiactorosFactory())->createRequest($symfonyRequest);
+        $factory = new PsrHttpFactory(
+            new ServerRequestFactory(),
+            new StreamFactory(),
+            new UploadedFileFactory(),
+            new ResponseFactory()
+        );
+
+        return $factory->createRequest($symfonyRequest);
     }
 
     protected function prepareUrlForRequest(string $uri): string

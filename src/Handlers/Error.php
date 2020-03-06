@@ -8,7 +8,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface as Psr7Request;
 use Slim\Handlers\Error as SlimError;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 class Error extends AbstractHandler
 {
@@ -28,7 +28,7 @@ class Error extends AbstractHandler
             return $this->renderExceptionWithSlim($request, $response, $exception);
         }
 
-        return (new DiactorosFactory())->createResponse($laravelResponse);
+        return $this->getContainer()->make(PsrHttpFactory::class)->createResponse($laravelResponse);
     }
 
     /**

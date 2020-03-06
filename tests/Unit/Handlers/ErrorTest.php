@@ -3,9 +3,9 @@
 namespace Tests\Unit\Handlers;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\ServerRequest;
 use Illuminate\Container\Container;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequest;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\Error;
 use PHPUnit\Framework\TestCase;
@@ -20,12 +20,12 @@ class ErrorTest extends TestCase
         $container = (new App(new Container()))->getContainer();
         $target = new Error($container);
 
-        $mockRequest = new ServerRequest('GET', '/');
+        $mockRequest = new ServerRequest([], [], '/', 'GET');
 
         $response = $target($mockRequest, new Response(), new Exception());
 
         $this->assertSame(500, $response->getStatusCode());
-        $this->assertContains('Whoops, looks like something went wrong.', (string)$response->getBody());
+        $this->assertStringContainsString('Whoops, looks like something went wrong.', (string)$response->getBody());
     }
 
     /**
@@ -36,9 +36,8 @@ class ErrorTest extends TestCase
         $container = (new App(new Container()))->getContainer();
         $target = new Error($container);
 
-        $mockRequest = new ServerRequest('GET', '/', [
-            'ACCEPT' => 'application/json',
-        ]);
+        $mockRequest = new ServerRequest([], [], '/', 'GET');
+        $mockRequest = $mockRequest->withHeader('ACCEPT', 'application/json');
 
         $response = $target($mockRequest, new Response(), new Exception());
 

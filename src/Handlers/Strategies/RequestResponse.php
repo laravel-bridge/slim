@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class RequestResponse implements InvocationStrategyInterface
@@ -49,7 +49,7 @@ class RequestResponse implements InvocationStrategyInterface
         $response = $this->container->call($callable, [$routeArguments]);
 
         if ($response instanceof SymfonyResponse) {
-            return (new DiactorosFactory())->createResponse($response);
+            return $this->container->make(PsrHttpFactory::class)->createResponse($response);
         }
 
         return $response;

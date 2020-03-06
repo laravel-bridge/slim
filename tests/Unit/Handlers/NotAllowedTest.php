@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Handlers;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\ServerRequest;
 use Illuminate\Container\Container;
+use Laminas\Diactoros\Response;
+use Laminas\Diactoros\ServerRequest;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\NotAllowed;
 use PHPUnit\Framework\TestCase;
@@ -22,13 +22,14 @@ class NotAllowedTest extends TestCase
 
         $target = new NotAllowed($container);
 
-        $mockRequest = new ServerRequest('POST', '/');
+        $mockRequest = new ServerRequest([], [], '/', 'POST');
 
         $response = $target($mockRequest, new Response(), ['GET']);
+        $body = (string)$response->getBody();
 
         $this->assertSame(405, $response->getStatusCode());
-        $this->assertContains('The POST method is not supported for this route', (string)$response->getBody());
-        $this->assertContains('Supported methods: GET', (string)$response->getBody());
+        $this->assertStringContainsString('The POST method is not supported for this route', $body);
+        $this->assertStringContainsString('Supported methods: GET', $body);
     }
 
     /**
@@ -42,15 +43,15 @@ class NotAllowedTest extends TestCase
 
         $target = new NotAllowed($container);
 
-        $mockRequest = new ServerRequest('POST', '/', [
-            'ACCEPT' => 'application/json',
-        ]);
+        $mockRequest = new ServerRequest([], [], '/', 'POST');
+        $mockRequest = $mockRequest->withHeader('ACCEPT', 'application/json');
 
         $response = $target($mockRequest, new Response(), ['GET']);
+        $body = (string)$response->getBody();
 
         $this->assertSame(405, $response->getStatusCode());
-        $this->assertJson((string)$response->getBody());
-        $this->assertContains('The POST method is not supported for this route', (string)$response->getBody());
-        $this->assertContains('Supported methods: GET', (string)$response->getBody());
+        $this->assertJson($body);
+        $this->assertStringContainsString('The POST method is not supported for this route', $body);
+        $this->assertStringContainsString('Supported methods: GET', $body);
     }
 }

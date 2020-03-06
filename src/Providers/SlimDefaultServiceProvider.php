@@ -22,5 +22,6 @@ class SlimDefaultServiceProvider extends ServiceProvider
         (new NotAllowedProvider($this->app))->register();
         (new NotFoundProvider($this->app))->register();
         (new PhpErrorHandlerProvider($this->app))->register();
+        (new HttpFactoryProvider($this->app))->register();
     }
 }

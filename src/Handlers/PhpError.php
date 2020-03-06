@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface as Psr7Response;
 use Psr\Http\Message\ServerRequestInterface as Psr7Request;
 use Slim\Handlers\PhpError as SlimPhpError;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 
@@ -32,7 +33,7 @@ class PhpError extends AbstractHandler
             return $this->renderSlimPhpError($request, $response, $exception);
         }
 
-        return (new DiactorosFactory())->createResponse($laravelResponse);
+        return $this->getContainer()->make(PsrHttpFactory::class)->createResponse($laravelResponse);
     }
 
     /**
