@@ -150,10 +150,12 @@ class ContainerBuilder
 
     private function registerSettingProvider(Application $container): void
     {
-        if ($this->useLaravelSetting) {
-            $container->instance('settings', new Repository($this->settings));
-        } else {
-            $container->instance('settings', new Collection($this->settings));
-        }
+        $container->singleton('settings', function () {
+            if ($this->useLaravelSetting) {
+                return new Repository($this->settings);
+            }
+
+            return new Collection($this->settings);
+        });
     }
 }
