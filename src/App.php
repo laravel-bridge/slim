@@ -22,37 +22,35 @@ class App extends SlimApp
         if ($container instanceof ContainerContracts) {
             parent::__construct($container);
 
-            $services = [];
+            $this->registerDefaultProvider($useLaravelService);
         } else {
             parent::__construct(new Container());
 
-            $services = $container;
+            $this->provisionService($container);
+
+            $this->createProvider($useLaravelService)->register();
         }
+    }
 
-        $this->provisionService($services);
-
-        $this->createProvider($useLaravelService, $this->resolveSettings($services))->register();
+    private function registerDefaultProvider(bool $useLaravelService): void
+    {
+        $this->createProvider($useLaravelService)->register();
     }
 
     /**
      * @param bool $useLaravelService
-     * @param array $settings
      * @return ServiceProvider
      */
-    private function createProvider($useLaravelService, $settings = []): ServiceProvider
+    private function createProvider($useLaravelService): ServiceProvider
     {
         /** @var ContainerContracts $container */
         $container = $this->getContainer();
 
         if ($useLaravelService) {
-            $provider = new LaravelServiceProvider($container);
-        } else {
-            $provider = new SlimDefaultServiceProvider($container);
+            return new LaravelServiceProvider($container);
         }
 
-        $provider->setSettings($settings);
-
-        return $provider;
+        return new SlimDefaultServiceProvider($container);
     }
 
     /**
@@ -64,31 +62,11 @@ class App extends SlimApp
         $container = $this->getContainer();
 
         foreach ($services as $abstract => $concrete) {
-            if ('settings' === $abstract && is_array($concrete)) {
-                continue;
-            }
-
             if (is_callable($concrete) || (is_string($concrete) && class_exists($concrete))) {
                 $container->singleton($abstract, $concrete);
             } else {
                 $container->instance($abstract, $concrete);
             }
         }
-    }
-
-    /**
-     * @param mixed $values
-     * @return array
-     */
-    private function resolveSettings($values): array
-    {
-        /** @var ContainerContracts $container */
-        $container = $this->getContainer();
-
-        if (isset($values['settings']) && is_array($values['settings'])) {
-            return array_merge($container['settings'], $values['settings']);
-        }
-
-        return [];
     }
 }

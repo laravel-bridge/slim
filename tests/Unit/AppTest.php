@@ -6,33 +6,13 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\ContainerBuilder;
-use LaravelBridge\Slim\Testing\TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Environment;
 use stdClass;
 
 class AppTest extends TestCase
 {
-    public function createApplication()
-    {
-        $app = new App(new Container());
-        $app->get('/', function () {
-            return 'bar';
-        });
-
-        return $app;
-    }
-
-    /**
-     * @test
-     */
-    public function shouldBeOkayWhenTestASimpleRoute(): void
-    {
-        $actual = $this->call('GET', '/');
-
-        $this->assertSame('bar', (string)$actual->getBody());
-    }
-
     /**
      * @test
      */
@@ -81,5 +61,21 @@ class AppTest extends TestCase
         $target = new App($container);
 
         $this->assertInstanceOf(App::class, $target);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenUsingSlimSettings(): void
+    {
+        $settings = [
+            'settings' => [
+                'foo' => 'bar',
+            ]
+        ];
+
+        $target = new App($settings);
+
+        $this->assertSame(['foo' => 'bar'], $target->getContainer()->get('settings'));
     }
 }

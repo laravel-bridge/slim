@@ -13,7 +13,9 @@ class SlimDefaultServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->instance('settings', new Collection($this->settings));
+        if (!$this->app->bound('settings')) {
+            $this->app->instance('settings', new Collection($this->settings));
+        }
 
         (new BaseProvider($this->app))->register();
         (new ErrorHandlerProvider($this->app))->register();
