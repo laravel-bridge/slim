@@ -35,6 +35,7 @@ class ContainerBuilder
         'error' => ErrorHandlerProvider::class,
         'found' => FoundHandlerProvider::class,
         'http' => HttpProvider::class,
+        'httpFactory' => HttpFactoryProvider::class,
         'notAllowed' => NotAllowedProvider::class,
         'notFound' => NotFoundProvider::class,
         'phpError' => PhpErrorHandlerProvider::class,
@@ -43,23 +44,55 @@ class ContainerBuilder
     private $useLaravelSetting = false;
 
     /**
+     * @var Application
+     */
+    private $container;
+
+    public function __construct(Application $container = null, $useLaravelService = false)
+    {
+        $this->container = $container ?? new Application();
+
+        if ($useLaravelService) {
+            $this->providers = [
+                'base' => BaseProvider::class,
+                'error' => LaravelErrorHandlerProvider::class,
+                'found' => LaravelFoundHandlerProvider::class,
+                'http' => LaravelHttpProvider::class,
+                'httpFactory' => HttpFactoryProvider::class,
+                'notAllowed' => LaravelNotAllowedProvider::class,
+                'notFound' => LaravelNotFoundProvider::class,
+                'phpError' => LaravelPhpErrorHandlerProvider::class,
+            ];
+        } else {
+            $this->providers = [
+                'base' => BaseProvider::class,
+                'error' => ErrorHandlerProvider::class,
+                'found' => FoundHandlerProvider::class,
+                'http' => HttpProvider::class,
+                'httpFactory' => HttpFactoryProvider::class,
+                'notAllowed' => NotAllowedProvider::class,
+                'notFound' => NotFoundProvider::class,
+                'phpError' => PhpErrorHandlerProvider::class,
+            ];
+        }
+    }
+
+    /**
      * @return Application
      */
     public function build(): Application
     {
-        $container = new Application();
-
-        $container->setupProvider(HttpFactoryProvider::class);
+        $this->container->setupProvider(HttpFactoryProvider::class);
 
         foreach ($this->providers as $provider) {
-            $container->setupProvider($provider);
+            $this->container->setupProvider($provider);
         }
 
-        $this->registerSettingProvider($container);
+        $this->registerSettingProvider($this->container);
 
-        $container->setupConfig('settings', $this->settings);
+        $this->container->setupConfig('settings', $this->settings);
 
-        return $container;
+        return $this->container;
     }
 
     /**
@@ -69,10 +102,10 @@ class ContainerBuilder
     {
         $this->useLaravelErrorHandler();
         $this->useLaravelFoundHandler();
+        $this->useLaravelHttp();
         $this->useLaravelNotAllowedHandler();
         $this->useLaravelNotFoundHandler();
         $this->useLaravelPhpErrorHandler();
-        $this->useLaravelHttp();
         $this->useLaravelSettings();
 
         return $this;

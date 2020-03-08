@@ -11,6 +11,7 @@ use LaravelBridge\Slim\Providers\Laravel\LaravelServiceProvider;
 use LaravelBridge\Slim\Providers\SettingsAwareTrait;
 use LaravelBridge\Slim\Providers\SlimDefaultServiceProvider;
 use Slim\App as SlimApp;
+use Slim\Collection;
 
 class App extends SlimApp
 {
@@ -66,7 +67,11 @@ class App extends SlimApp
 
         foreach ($services as $abstract => $concrete) {
             if ('settings' === $abstract) {
-                $concrete = array_merge($this->settings, $concrete);
+                $container->singleton($abstract, function () use ($concrete) {
+                    return new Collection(array_merge($this->settings, $concrete));
+                });
+
+                continue;
             }
 
             if (is_callable($concrete) || (is_string($concrete) && class_exists($concrete))) {

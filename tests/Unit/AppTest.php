@@ -85,6 +85,6 @@ class AppTest extends TestCase
             ],
         ]);
 
-        $this->assertSame($expected, $target->getContainer()->get('settings'));
+        $this->assertSame($expected, $target->getContainer()->get('settings')->all());
     }
 }

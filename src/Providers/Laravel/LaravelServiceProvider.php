@@ -24,8 +24,9 @@ class LaravelServiceProvider extends ServiceProvider
         (new ErrorHandlerProvider($this->app))->register();
         (new FoundHandlerProvider($this->app))->register();
         (new HttpProvider($this->app))->register();
+        (new HttpFactoryProvider($this->app))->register();
         (new NotAllowedProvider($this->app))->register();
         (new NotFoundProvider($this->app))->register();
-        (new HttpFactoryProvider($this->app))->register();
+        (new PhpErrorHandlerProvider($this->app))->register();
     }
 }
