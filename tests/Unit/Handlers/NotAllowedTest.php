@@ -3,14 +3,16 @@
 namespace Tests\Unit\Handlers;
 
 use Illuminate\Container\Container;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\ServerRequest;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\NotAllowed;
+use LaravelBridge\Slim\Testing\Concerns\MakesHttpRequests;
 use PHPUnit\Framework\TestCase;
+use Slim\Http\Response;
 
 class NotAllowedTest extends TestCase
 {
+    use MakesHttpRequests;
+
     /**
      * @test
      */
@@ -22,7 +24,7 @@ class NotAllowedTest extends TestCase
 
         $target = new NotAllowed($container);
 
-        $mockRequest = new ServerRequest([], [], '/', 'POST');
+        $mockRequest = $this->createServerRequest('POST', '/');
 
         $response = $target($mockRequest, new Response(), ['GET']);
         $body = (string)$response->getBody();
@@ -43,8 +45,8 @@ class NotAllowedTest extends TestCase
 
         $target = new NotAllowed($container);
 
-        $mockRequest = new ServerRequest([], [], '/', 'POST');
-        $mockRequest = $mockRequest->withHeader('ACCEPT', 'application/json');
+        $mockRequest = $this->createServerRequest('POST', '/')
+            ->withHeader('ACCEPT', 'application/json');
 
         $response = $target($mockRequest, new Response(), ['GET']);
         $body = (string)$response->getBody();

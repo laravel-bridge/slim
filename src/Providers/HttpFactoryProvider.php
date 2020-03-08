@@ -2,11 +2,11 @@
 
 namespace LaravelBridge\Slim\Providers;
 
+use Http\Factory\Slim\ResponseFactory;
+use Http\Factory\Slim\ServerRequestFactory;
+use Http\Factory\Slim\StreamFactory;
+use Http\Factory\Slim\UploadedFileFactory;
 use Illuminate\Support\ServiceProvider;
-use Laminas\Diactoros\ResponseFactory;
-use Laminas\Diactoros\ServerRequestFactory;
-use Laminas\Diactoros\StreamFactory;
-use Laminas\Diactoros\UploadedFileFactory;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;

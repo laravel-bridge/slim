@@ -2,14 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Container\Container as ContainerContract;
 use LaravelBridge\Slim\App;
-use LaravelBridge\Slim\ContainerBuilder;
 use LaravelBridge\Slim\Testing\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Environment;
-use stdClass;
 
 class AppTest extends TestCase
 {

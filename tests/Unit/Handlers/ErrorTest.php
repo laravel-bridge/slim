@@ -4,14 +4,16 @@ namespace Tests\Unit\Handlers;
 
 use Exception;
 use Illuminate\Container\Container;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\ServerRequest;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Handlers\Error;
+use LaravelBridge\Slim\Testing\Concerns\MakesHttpRequests;
 use PHPUnit\Framework\TestCase;
+use Slim\Http\Response;
 
 class ErrorTest extends TestCase
 {
+    use MakesHttpRequests;
+
     /**
      * @test
      */
@@ -20,7 +22,7 @@ class ErrorTest extends TestCase
         $container = (new App(new Container()))->getContainer();
         $target = new Error($container);
 
-        $mockRequest = new ServerRequest([], [], '/', 'GET');
+        $mockRequest = $this->createServerRequest('GET', '/');
 
         $response = $target($mockRequest, new Response(), new Exception());
 
@@ -31,13 +33,13 @@ class ErrorTest extends TestCase
     /**
      * @test
      */
-    public function shouldGetJsonResponseWhenRequestExpectJson()
+    public function shouldGetJsonResponseWhenRequestExpectJson(): void
     {
         $container = (new App(new Container()))->getContainer();
         $target = new Error($container);
 
-        $mockRequest = new ServerRequest([], [], '/', 'GET');
-        $mockRequest = $mockRequest->withHeader('ACCEPT', 'application/json');
+        $mockRequest = $this->createServerRequest('GET', '/')
+            ->withHeader('ACCEPT', 'application/json');
 
         $response = $target($mockRequest, new Response(), new Exception());
 

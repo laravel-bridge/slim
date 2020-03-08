@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace LaravelBridge\Slim\Testing\Concerns;
 
+use Http\Factory\Slim\ResponseFactory;
+use Http\Factory\Slim\ServerRequestFactory;
+use Http\Factory\Slim\StreamFactory;
+use Http\Factory\Slim\UploadedFileFactory;
 use Illuminate\Support\Str;
-use Laminas\Diactoros\ResponseFactory;
-use Laminas\Diactoros\ServerRequestFactory;
-use Laminas\Diactoros\StreamFactory;
-use Laminas\Diactoros\UploadedFileFactory;
 use LaravelBridge\Container\Traits\ContainerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
