@@ -17,8 +17,7 @@ install:
   - COMPOSER_MEMORY_LIMIT=-1 composer install
 
 script:
-  - php vendor/bin/phpcs
-  - php vendor/bin/phpunit
+  - make test
 
 after_success:
   - if [[ "7.4" == "${TRAVIS_PHP_VERSION}" ]]; then bash <(curl -s https://codecov.io/bash) ; fi
