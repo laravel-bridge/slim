@@ -11,7 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Http\Response as LaravelResponse;
 use Illuminate\Support\Arr;
-use LaravelBridge\Support\Traits\ContainerAwareTrait;
+use LaravelBridge\Container\Traits\ContainerAwareTrait;
 use Psr\Http\Message\ServerRequestInterface as Psr7Request;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;

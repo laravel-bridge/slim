@@ -16,17 +16,21 @@
         "illuminate/container": "^5.5 | ^6 | ^7",
         "illuminate/http": "^5.5 | ^6 | ^7",
         "illuminate/support": "^5.5 | ^6 | ^7",
-        "laminas/laminas-diactoros": "^2.2",
+        "laminas/laminas-diactoros": "^1.8 | ^2.2",
+        "laravel-bridge/container": "^0.1.0",
         "laravel-bridge/scratch": "^0.7.0",
-        "laravel-bridge/support": "^0.2.0",
+        "laravel-bridge/support": "^0.4.0",
         "psr/container": "^1.0",
         "psr/http-factory": "^1.0",
         "slim/slim": "^3.0",
         "symfony/debug": "^4.4 | ^5",
-        "symfony/psr-http-message-bridge": "^2.0"
+        "symfony/psr-http-message-bridge": "^1.3 | ^2.0"
+    },
+    "suggest": {
+        "filp/whoops": "Required for friendly error pages in development (^2.4)."
     },
     "require-dev": {
-        "phpunit/phpunit": "^7 | ^8",
+        "phpunit/phpunit": "^7 | ^8 | ^9",
         "psy/psysh": "^0.9.12",
         "squizlabs/php_codesniffer": "^3.5"
     },
