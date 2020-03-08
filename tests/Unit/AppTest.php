@@ -68,14 +68,23 @@ class AppTest extends TestCase
      */
     public function shouldBeOkayWhenUsingSlimSettings(): void
     {
-        $settings = [
-            'settings' => [
-                'foo' => 'bar',
-            ]
+        $expected = [
+            'httpVersion' => '1.1',
+            'responseChunkSize' => 4096,
+            'outputBuffering' => 'append',
+            'determineRouteBeforeAppMiddleware' => false,
+            'displayErrorDetails' => false,
+            'addContentLengthHeader' => true,
+            'routerCacheFile' => false,
+            'foo' => 'bar'
         ];
 
-        $target = new App($settings);
+        $target = new App([
+            'settings' => [
+                'foo' => 'bar',
+            ],
+        ]);
 
-        $this->assertSame(['foo' => 'bar'], $target->getContainer()->get('settings'));
+        $this->assertSame($expected, $target->getContainer()->get('settings'));
     }
 }

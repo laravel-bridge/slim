@@ -8,11 +8,14 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\Container as ContainerContracts;
 use Illuminate\Support\ServiceProvider;
 use LaravelBridge\Slim\Providers\Laravel\LaravelServiceProvider;
+use LaravelBridge\Slim\Providers\SettingsAwareTrait;
 use LaravelBridge\Slim\Providers\SlimDefaultServiceProvider;
 use Slim\App as SlimApp;
 
 class App extends SlimApp
 {
+    use SettingsAwareTrait;
+
     /**
      * @param ContainerContracts|array $container
      * @param bool $useLaravelService
@@ -62,6 +65,10 @@ class App extends SlimApp
         $container = $this->getContainer();
 
         foreach ($services as $abstract => $concrete) {
+            if ('settings' === $abstract) {
+                $concrete = array_merge($this->settings, $concrete);
+            }
+
             if (is_callable($concrete) || (is_string($concrete) && class_exists($concrete))) {
                 $container->singleton($abstract, $concrete);
             } else {
