@@ -17,7 +17,7 @@ class HttpProvider extends ServiceProvider
 
         $this->app->bindIf(LaravelRequest::class, function () {
             $symfonyRequest = $this->app->make(HttpFoundationFactory::class)->createRequest(
-                $this->app->make('requ  est')
+                $this->app->make('request')
             );
 
             return LaravelRequest::createFromBase($symfonyRequest);
