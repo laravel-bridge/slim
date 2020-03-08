@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelBridge\Slim;
 
 use Illuminate\Config\Repository;
+use Illuminate\Container\Container;
 use LaravelBridge\Scratch\Application;
 use LaravelBridge\Slim\Providers\BaseProvider;
 use LaravelBridge\Slim\Providers\ErrorHandlerProvider;
@@ -48,9 +49,18 @@ class ContainerBuilder
      */
     private $container;
 
-    public function __construct(Application $container = null, $useLaravelService = false)
+    /**
+     * @var array
+     */
+    private $services;
+
+    /**
+     * @param Container|array $container
+     * @param bool $useLaravelService
+     */
+    public function __construct($container = [], $useLaravelService = false)
     {
-        $this->container = $container ?? new Application();
+        $this->prepareContainer($container);
 
         if ($useLaravelService) {
             $this->providers = [
@@ -179,6 +189,42 @@ class ContainerBuilder
         $this->useLaravelSetting = true;
 
         return $this;
+    }
+
+    /**
+     * @param $container
+     * @return Application
+     */
+    private function prepareContainer($container): Application
+    {
+        if ($container instanceof Container) {
+            return $this->container = Application::createFromBase($container);
+        }
+
+        $this->container = new Application();
+
+        $this->prepareServices($container);
+
+        return $this->container;
+    }
+
+    /**
+     * @param array $services
+     */
+    private function prepareServices(array $services): void
+    {
+        $this->setSettingsByServices($services);
+
+        // Ensure settings key is unset
+        unset($services['settings']);
+
+        foreach ($services as $abstract => $concrete) {
+            if (is_callable($concrete) || (is_string($concrete) && class_exists($concrete))) {
+                $this->container->singleton($abstract, $concrete);
+            } else {
+                $this->container->instance($abstract, $concrete);
+            }
+        }
     }
 
     private function registerSettingProvider(Application $container): void

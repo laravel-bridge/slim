@@ -29,4 +29,13 @@ trait SettingsAwareTrait
 
         return $this;
     }
+
+    /**
+     * @param array $services
+     * @return static
+     */
+    public function setSettingsByServices(array $services)
+    {
+        return $this->setSettings($services['settings'] ?? []);
+    }
 }

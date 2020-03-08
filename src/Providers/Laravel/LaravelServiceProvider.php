@@ -16,9 +16,9 @@ class LaravelServiceProvider extends ServiceProvider
 
     public function register()
     {
-        if (!$this->app->bound('settings')) {
-            $this->app->instance('settings', new Repository($this->settings));
-        }
+        $this->app->bindIf('settings', function () {
+            return new Repository($this->settings);
+        });
 
         (new BaseProvider($this->app))->register();
         (new ErrorHandlerProvider($this->app))->register();
