@@ -1,26 +1,17 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Illuminate\Container\Container;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Http\Response as LaravelResponse;
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Testing\TestCase;
+use Slim\App as SlimApp;
 
 class LaravelServiceTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function shouldBeOkayWhenTestASimpleRouteWithLaravelService(): void
-    {
-        $actual = $this->call('GET', '/');
-
-        $this->assertSame('bar', (string)$actual->getBody());
-    }
-
-    public function createApplication()
+    public function createSlimApplication(): SlimApp
     {
         $app = new App(new Container(), true);
         $app->getContainer()->get('settings')->set('displayErrorDetails', true);
@@ -30,5 +21,15 @@ class LaravelServiceTest extends TestCase
         });
 
         return $app;
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenTestASimpleRouteWithLaravelService(): void
+    {
+        $actual = $this->call('GET', '/');
+
+        $this->assertSame('bar', (string)$actual->getBody());
     }
 }

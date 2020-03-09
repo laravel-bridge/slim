@@ -4,10 +4,11 @@ namespace Tests\Feature;
 
 use LaravelBridge\Slim\App;
 use LaravelBridge\Slim\Testing\TestCase;
+use Slim\App as SlimApp;
 
 class AppTest extends TestCase
 {
-    public function createApplication()
+    public function createSlimApplication(): SlimApp
     {
         $app = new App();
         $app->get('/', function () {

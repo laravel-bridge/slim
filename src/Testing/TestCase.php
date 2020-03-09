@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LaravelBridge\Slim\Testing;
 
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\Facade;
+use LaravelBridge\Scratch\Application as LaravelBridge;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Slim\App;
 
@@ -14,27 +14,32 @@ abstract class TestCase extends BaseTestCase
     use Concerns\MakesHttpRequests;
 
     /**
-     * The Illuminate application instance.
+     * The LaravelBridge Container
+     *
+     * @var LaravelBridge
+     */
+    protected $container;
+
+    /**
+     * The Slim application instance.
      *
      * @var App
      */
-    protected $app;
+    protected $slim;
 
     /**
      * Creates the application.
      *
-     * Needs to be implemented by subclasses.
-     *
      * @return App
      */
-    abstract public function createApplication();
+    abstract public function createSlimApplication(): App;
 
     /**
      * Setup the test environment.
      */
     protected function setUp(): void
     {
-        if (! $this->app) {
+        if (!$this->slim) {
             $this->refreshApplication();
         }
 
@@ -44,17 +49,10 @@ abstract class TestCase extends BaseTestCase
     /**
      * Refresh the application instance.
      */
-    protected function refreshApplication()
+    protected function refreshApplication(): void
     {
-        $this->app = $this->createApplication();
-    }
-
-    /**
-     * @return Container
-     */
-    protected function resolveContainer()
-    {
-        return $this->app->getContainer();
+        $this->slim = $this->createSlimApplication();
+        $this->container = $this->slim->getContainer();
     }
 
     /**
@@ -62,9 +60,12 @@ abstract class TestCase extends BaseTestCase
      *
      * @param string $abstract
      * @param mixed $concrete
+     * @return TestCase
      */
-    protected function instance($abstract, $concrete)
+    protected function instance($abstract, $concrete): TestCase
     {
-        $this->resolveContainer()->instance($abstract, $concrete);
+        $this->container->instance($abstract, $concrete);
+
+        return $this;
     }
 }

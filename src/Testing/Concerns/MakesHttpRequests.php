@@ -9,14 +9,17 @@ use Http\Factory\Slim\ServerRequestFactory;
 use Http\Factory\Slim\StreamFactory;
 use Http\Factory\Slim\UploadedFileFactory;
 use Illuminate\Support\Str;
-use LaravelBridge\Container\Traits\ContainerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 trait MakesHttpRequests
 {
-    use ContainerAwareTrait;
+    /**
+     * @var string
+     */
+    protected $baseUri = 'http://localhost:8080';
 
     /**
      * Call the given URI and return the Response.
@@ -30,15 +33,34 @@ trait MakesHttpRequests
      * @param string|null $content
      * @return ResponseInterface
      */
-    public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-    {
+    protected function call(
+        $method,
+        $uri,
+        $parameters = [],
+        $cookies = [],
+        $files = [],
+        $server = [],
+        $content = null
+    ): ResponseInterface {
         $request = $this->createServerRequest($method, $uri, $parameters, $cookies, $files, $server, $content);
 
         $this->instance('request', $request);
 
-        return $this->app->run($request);
+        return $this->slim->run($request);
     }
 
+    /**
+     * Create Request
+     *
+     * @param $method
+     * @param $uri
+     * @param array $parameters
+     * @param array $cookies
+     * @param array $files
+     * @param array $server
+     * @param null $content
+     * @return ServerRequestInterface
+     */
     protected function createServerRequest(
         $method,
         $uri,
@@ -47,7 +69,7 @@ trait MakesHttpRequests
         $files = [],
         $server = [],
         $content = null
-    ) {
+    ): ServerRequestInterface {
         $symfonyRequest = SymfonyRequest::create(
             $this->prepareUrlForRequest($uri),
             $method,
@@ -75,9 +97,20 @@ trait MakesHttpRequests
         }
 
         if (!Str::startsWith($uri, 'http')) {
-            $uri = 'http://localhost:8080/' . $uri;
+            $uri = $this->baseUri . '/' . $uri;
         }
 
         return trim($uri, '/');
+    }
+
+    /**
+     * @param string $baseUri
+     * @return static
+     */
+    public function withBaseUri(string $baseUri)
+    {
+        $this->baseUri = rtrim($baseUri, '/');
+
+        return $this;
     }
 }
