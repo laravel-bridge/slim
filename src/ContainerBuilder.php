@@ -8,10 +8,12 @@ use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use LaravelBridge\Scratch\Application;
 use LaravelBridge\Slim\Providers\BaseProvider;
+use LaravelBridge\Slim\Providers\CallableResolverProvider;
 use LaravelBridge\Slim\Providers\ErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\FoundHandlerProvider;
 use LaravelBridge\Slim\Providers\HttpFactoryProvider;
 use LaravelBridge\Slim\Providers\HttpProvider;
+use LaravelBridge\Slim\Providers\Laravel\CallableResolverProvider as LaravelCallableResolverProvider;
 use LaravelBridge\Slim\Providers\Laravel\ErrorHandlerProvider as LaravelErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\Laravel\FoundHandlerProvider as LaravelFoundHandlerProvider;
 use LaravelBridge\Slim\Providers\Laravel\HttpProvider as LaravelHttpProvider;
@@ -29,22 +31,6 @@ class ContainerBuilder
     use SettingsAwareTrait;
 
     /**
-     * @var array
-     */
-    private $providers = [
-        'base' => BaseProvider::class,
-        'error' => ErrorHandlerProvider::class,
-        'found' => FoundHandlerProvider::class,
-        'http' => HttpProvider::class,
-        'httpFactory' => HttpFactoryProvider::class,
-        'notAllowed' => NotAllowedProvider::class,
-        'notFound' => NotFoundProvider::class,
-        'phpError' => PhpErrorHandlerProvider::class,
-    ];
-
-    private $useLaravelSetting = false;
-
-    /**
      * @var Application
      */
     private $container;
@@ -52,7 +38,17 @@ class ContainerBuilder
     /**
      * @var array
      */
+    private $providers;
+
+    /**
+     * @var array
+     */
     private $services;
+
+    /**
+     * @var bool
+     */
+    private $useLaravelSetting = false;
 
     /**
      * @param Container|array $container
@@ -65,6 +61,7 @@ class ContainerBuilder
         if ($useLaravelService) {
             $this->providers = [
                 'base' => BaseProvider::class,
+                'callableResolver' => LaravelCallableResolverProvider::class,
                 'error' => LaravelErrorHandlerProvider::class,
                 'found' => LaravelFoundHandlerProvider::class,
                 'http' => LaravelHttpProvider::class,
@@ -76,6 +73,7 @@ class ContainerBuilder
         } else {
             $this->providers = [
                 'base' => BaseProvider::class,
+                'callableResolver' => CallableResolverProvider::class,
                 'error' => ErrorHandlerProvider::class,
                 'found' => FoundHandlerProvider::class,
                 'http' => HttpProvider::class,
@@ -110,6 +108,7 @@ class ContainerBuilder
      */
     public function useLaravelAllHandler(): ContainerBuilder
     {
+        $this->useLaravelCallableResolver();
         $this->useLaravelErrorHandler();
         $this->useLaravelFoundHandler();
         $this->useLaravelHttp();
@@ -117,6 +116,16 @@ class ContainerBuilder
         $this->useLaravelNotFoundHandler();
         $this->useLaravelPhpErrorHandler();
         $this->useLaravelSettings();
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function useLaravelCallableResolver(): ContainerBuilder
+    {
+        $this->providers['callableResolver'] = LaravelCallableResolverProvider::class;
 
         return $this;
     }

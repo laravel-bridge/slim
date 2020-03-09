@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LaravelBridge\Slim\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Slim\CallableResolver;
 use Slim\Http\Environment;
 use Slim\Router;
 
@@ -13,16 +12,8 @@ class BaseProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->registerCallableResolver();
         $this->registerEnvironment();
         $this->registerRouter();
-    }
-
-    private function registerCallableResolver()
-    {
-        $this->app->bindIf('callableResolver', function () {
-            return new CallableResolver($this->app);
-        }, true);
     }
 
     private function registerEnvironment()
