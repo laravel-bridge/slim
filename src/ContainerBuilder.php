@@ -6,6 +6,7 @@ namespace LaravelBridge\Slim;
 
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
+use Illuminate\Support\ServiceProvider;
 use LaravelBridge\Scratch\Application;
 use LaravelBridge\Slim\Providers\BaseProvider;
 use LaravelBridge\Slim\Providers\CallableResolverProvider;
@@ -38,7 +39,10 @@ class ContainerBuilder
     /**
      * @var array
      */
-    private $providers;
+    private $providers = [
+        'base' => BaseProvider::class,
+        'httpFactory' => HttpFactoryProvider::class,
+    ];
 
     /**
      * @var array
@@ -59,29 +63,9 @@ class ContainerBuilder
         $this->prepareContainer($container);
 
         if ($useLaravelService) {
-            $this->providers = [
-                'base' => BaseProvider::class,
-                'callableResolver' => LaravelCallableResolverProvider::class,
-                'error' => LaravelErrorHandlerProvider::class,
-                'found' => LaravelFoundHandlerProvider::class,
-                'http' => LaravelHttpProvider::class,
-                'httpFactory' => HttpFactoryProvider::class,
-                'notAllowed' => LaravelNotAllowedProvider::class,
-                'notFound' => LaravelNotFoundProvider::class,
-                'phpError' => LaravelPhpErrorHandlerProvider::class,
-            ];
+            $this->useLaravelAllProviders();
         } else {
-            $this->providers = [
-                'base' => BaseProvider::class,
-                'callableResolver' => CallableResolverProvider::class,
-                'error' => ErrorHandlerProvider::class,
-                'found' => FoundHandlerProvider::class,
-                'http' => HttpProvider::class,
-                'httpFactory' => HttpFactoryProvider::class,
-                'notAllowed' => NotAllowedProvider::class,
-                'notFound' => NotFoundProvider::class,
-                'phpError' => PhpErrorHandlerProvider::class,
-            ];
+            $this->useSlimAllProviders();
         }
     }
 
@@ -90,8 +74,6 @@ class ContainerBuilder
      */
     public function build(): Application
     {
-        $this->container->setupProvider(HttpFactoryProvider::class);
-
         foreach ($this->providers as $provider) {
             $this->container->setupProvider($provider);
         }
@@ -106,7 +88,7 @@ class ContainerBuilder
     /**
      * @return static
      */
-    public function useLaravelAllHandler(): ContainerBuilder
+    public function useLaravelAllProviders(): ContainerBuilder
     {
         $this->useLaravelCallableResolver();
         $this->useLaravelErrorHandler();
@@ -115,7 +97,115 @@ class ContainerBuilder
         $this->useLaravelNotAllowedHandler();
         $this->useLaravelNotFoundHandler();
         $this->useLaravelPhpErrorHandler();
-        $this->useLaravelSettings();
+
+        $this->useLaravelSettings(true);
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function useSlimAllProviders(): ContainerBuilder
+    {
+        $this->useCustomCallableResolver(CallableResolverProvider::class);
+        $this->useCustomErrorHandler(ErrorHandlerProvider::class);
+        $this->useCustomFoundHandler(FoundHandlerProvider::class);
+        $this->useCustomHttp(HttpProvider::class);
+        $this->useCustomHttpFactory(HttpFactoryProvider::class);
+        $this->useCustomNotAllowedHandler(NotAllowedProvider::class);
+        $this->useCustomNotFoundHandler(NotFoundProvider::class);
+        $this->useCustomPhpErrorHandler(PhpErrorHandlerProvider::class);
+
+        $this->useLaravelSettings(false);
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomCallableResolver($provider): ContainerBuilder
+    {
+        $this->providers['callableResolver'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomErrorHandler($provider): ContainerBuilder
+    {
+        $this->providers['error'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomFoundHandler($provider): ContainerBuilder
+    {
+        $this->providers['found'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomHttp($provider): ContainerBuilder
+    {
+        $this->providers['http'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomHttpFactory($provider): ContainerBuilder
+    {
+        $this->providers['httpFactory'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomNotAllowedHandler($provider): ContainerBuilder
+    {
+        $this->providers['notAllowed'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomNotFoundHandler($provider): ContainerBuilder
+    {
+        $this->providers['notFound'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function useCustomPhpErrorHandler($provider): ContainerBuilder
+    {
+        $this->providers['phpError'] = $provider;
 
         return $this;
     }
@@ -125,9 +215,7 @@ class ContainerBuilder
      */
     public function useLaravelCallableResolver(): ContainerBuilder
     {
-        $this->providers['callableResolver'] = LaravelCallableResolverProvider::class;
-
-        return $this;
+        return $this->useCustomCallableResolver(LaravelCallableResolverProvider::class);
     }
 
     /**
@@ -135,9 +223,7 @@ class ContainerBuilder
      */
     public function useLaravelErrorHandler(): ContainerBuilder
     {
-        $this->providers['error'] = LaravelErrorHandlerProvider::class;
-
-        return $this;
+        return $this->useCustomErrorHandler(LaravelErrorHandlerProvider::class);
     }
 
     /**
@@ -145,9 +231,7 @@ class ContainerBuilder
      */
     public function useLaravelFoundHandler(): ContainerBuilder
     {
-        $this->providers['found'] = LaravelFoundHandlerProvider::class;
-
-        return $this;
+        return $this->useCustomFoundHandler(LaravelFoundHandlerProvider::class);
     }
 
     /**
@@ -155,9 +239,7 @@ class ContainerBuilder
      */
     public function useLaravelHttp(): ContainerBuilder
     {
-        $this->providers['http'] = LaravelHttpProvider::class;
-
-        return $this;
+        return $this->useCustomHttp(LaravelHttpProvider::class);
     }
 
     /**
@@ -165,9 +247,7 @@ class ContainerBuilder
      */
     public function useLaravelNotAllowedHandler(): ContainerBuilder
     {
-        $this->providers['notAllowed'] = LaravelNotAllowedProvider::class;
-
-        return $this;
+        return $this->useCustomNotAllowedHandler(LaravelNotAllowedProvider::class);
     }
 
     /**
@@ -175,9 +255,7 @@ class ContainerBuilder
      */
     public function useLaravelNotFoundHandler(): ContainerBuilder
     {
-        $this->providers['notFound'] = LaravelNotFoundProvider::class;
-
-        return $this;
+        return $this->useCustomNotFoundHandler(LaravelNotFoundProvider::class);
     }
 
     /**
@@ -185,17 +263,16 @@ class ContainerBuilder
      */
     public function useLaravelPhpErrorHandler(): ContainerBuilder
     {
-        $this->providers['phpError'] = LaravelPhpErrorHandlerProvider::class;
-
-        return $this;
+        return $this->useCustomPhpErrorHandler(LaravelPhpErrorHandlerProvider::class);
     }
 
     /**
+     * @param bool $use
      * @return static
      */
-    public function useLaravelSettings(): ContainerBuilder
+    public function useLaravelSettings(bool $use = true): ContainerBuilder
     {
-        $this->useLaravelSetting = true;
+        $this->useLaravelSetting = $use;
 
         return $this;
     }
