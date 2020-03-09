@@ -14,8 +14,8 @@ class CallableResolverTest extends TestCase
      */
     public function shouldResolveAsInvokeWhenInputIsClassName(): void
     {
-        $app = new CallableResolver(new Container());
-        $actual = $app->resolve(TestController::class);
+        $target = new CallableResolver(new Container());
+        $actual = $target->resolve(TestController::class);
 
         $this->assertSame('TestController:__invoke', $actual());
     }
@@ -25,8 +25,8 @@ class CallableResolverTest extends TestCase
      */
     public function shouldResolveAsInvokeWhenInputIsClassNameAndMethod(): void
     {
-        $app = new CallableResolver(new Container());
-        $actual = $app->resolve(TestController::class . ':view');
+        $target = new CallableResolver(new Container());
+        $actual = $target->resolve(TestController::class . ':view');
 
         $this->assertSame('TestController:view', $actual());
     }
