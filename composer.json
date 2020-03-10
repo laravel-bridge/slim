@@ -6,7 +6,9 @@
     "authors": [
         {
             "name": "Miles",
-            "email": "jangconan@gmail.com"
+            "email": "jangconan@gmail.com",
+            "homepage": "https://mileschou.github.io/",
+            "role": "Maintainer"
         }
     ],
     "require": {
@@ -15,8 +17,8 @@
         "http-interop/http-factory-slim": "^2.0",
         "illuminate/container": "^5.6 | ^6 | ^7",
         "illuminate/support": "^5.6 | ^6 | ^7",
-        "laravel-bridge/container": "^0.1.0",
-        "laravel-bridge/scratch": "^0.9.0",
+        "laravel-bridge/container": "^0.2.0",
+        "laravel-bridge/scratch": "^0.9.2",
         "laravel-bridge/support": "^0.5.0",
         "psr/container": "^1.0",
         "psr/http-factory": "^1.0",
@@ -31,7 +33,7 @@
     "require-dev": {
         "illuminate/config": "^5.6 | ^6 | ^7",
         "illuminate/http": "^5.6 | ^6 | ^7",
-        "phpstan/phpstan": "^0.12.14",
+        "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^7 | ^8 | ^9",
         "psy/psysh": "^0.9.12",
         "squizlabs/php_codesniffer": "^3.5"
