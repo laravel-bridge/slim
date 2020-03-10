@@ -7,7 +7,7 @@ namespace LaravelBridge\Slim\Providers\Laravel;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Support\ServiceProvider;
 use LaravelBridge\Slim\Providers\HttpProvider as SlimHttpProvider;
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use LaravelBridge\Support\IlluminateHttpFactory;
 
 class HttpProvider extends ServiceProvider
 {
@@ -16,11 +16,7 @@ class HttpProvider extends ServiceProvider
         (new SlimHttpProvider($this->app))->register();
 
         $this->app->bindIf(LaravelRequest::class, function () {
-            $symfonyRequest = $this->app->make(HttpFoundationFactory::class)->createRequest(
-                $this->app->make('request')
-            );
-
-            return LaravelRequest::createFromBase($symfonyRequest);
+            return (new IlluminateHttpFactory())->createRequest($this->app->make('request'));
         }, true);
     }
 }
