@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LaravelBridge\Slim\Handlers\Strategies;
 
 use Illuminate\Contracts\Container\Container;
-use Psr\Container\ContainerInterface;
+use LaravelBridge\Container\Traits\LaravelContainerAwareTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Interfaces\InvocationStrategyInterface;
@@ -14,15 +14,12 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class RequestResponse implements InvocationStrategyInterface
 {
-    /**
-     * @var Container|ContainerInterface
-     */
-    private $container;
+    use LaravelContainerAwareTrait;
 
     /**
      * @param Container $container
      */
-    public function __construct($container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }

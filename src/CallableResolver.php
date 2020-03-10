@@ -6,6 +6,7 @@ namespace LaravelBridge\Slim;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use LaravelBridge\Container\Traits\LaravelContainerAwareTrait;
 use RuntimeException;
 use Slim\Interfaces\CallableResolverInterface;
 
@@ -14,12 +15,9 @@ use Slim\Interfaces\CallableResolverInterface;
  */
 class CallableResolver implements CallableResolverInterface
 {
-    private const CALLABLE_PATTERN = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+    use LaravelContainerAwareTrait;
 
-    /**
-     * @var Container
-     */
-    private $container;
+    private const CALLABLE_PATTERN = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
 
     /**
      * @param Container $container
@@ -86,7 +84,7 @@ class CallableResolver implements CallableResolverInterface
     protected function resolveCallable($class, $method)
     {
         if ($this->container->has($class)) {
-            return [$this->container->get($class), $method];
+            return [$this->container->make($class), $method];
         }
 
         if (class_exists($class)) {

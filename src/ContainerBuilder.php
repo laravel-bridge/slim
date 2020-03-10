@@ -7,6 +7,7 @@ namespace LaravelBridge\Slim;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use LaravelBridge\Container\Traits\LaravelBridgeContainerAwareTrait;
 use LaravelBridge\Scratch\Application;
 use LaravelBridge\Slim\Providers\BaseProvider;
 use LaravelBridge\Slim\Providers\CallableResolverProvider;
@@ -29,12 +30,8 @@ use Slim\Collection;
 
 class ContainerBuilder
 {
+    use LaravelBridgeContainerAwareTrait;
     use SettingsAwareTrait;
-
-    /**
-     * @var Application
-     */
-    private $container;
 
     /**
      * @var array
