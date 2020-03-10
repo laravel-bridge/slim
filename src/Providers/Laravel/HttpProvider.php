@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace LaravelBridge\Slim\Providers\Laravel;
 
 use Illuminate\Http\Request as LaravelRequest;
-use Illuminate\Support\ServiceProvider;
 use LaravelBridge\Slim\Providers\HttpProvider as SlimHttpProvider;
 use LaravelBridge\Support\IlluminateHttpFactory;
 
-class HttpProvider extends ServiceProvider
+class HttpProvider extends SlimHttpProvider
 {
-    public function register()
+    public function registerRequest(): void
     {
-        (new SlimHttpProvider($this->app))->register();
+        parent::registerRequest();
+
+        $this->app->singleton(IlluminateHttpFactory::class);
 
         $this->app->bindIf(LaravelRequest::class, function () {
-            return (new IlluminateHttpFactory())->createRequest($this->app->make('request'));
+            /** @var IlluminateHttpFactory $factory */
+            $factory = $this->app->make(IlluminateHttpFactory::class);
+
+            return $factory->createRequest($this->app->make('request'));
         }, true);
     }
 }
