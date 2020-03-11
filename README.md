@@ -20,53 +20,96 @@ Using Composer to install package:
 composer require laravel-bridge/slim
 ```
 
+### Using array as container
+
+App params is array, like following code.
+
+```php
+use Slim\App;
+
+$container = [
+    SomeClass::class => function() {},
+]
+
+$app = new App($container);
+```
+
 Replace class name `Slim\App` to bridge class [`LaravelBridge\Slim\App`](/src/App.php):
 
 ```php
 // Rename use class
 use LaravelBridge\Slim\App;
-
-// Or rename new instance class
-$app = new \LaravelBridge\Slim\App();
 ```
 
-Finally, it will work on most Slim project. Here has an [example](https://github.com/laravel-bridge/slim-example/tree/using-laravel-bridge) for more detail.
+It will work on most Slim project. Here has an [example](https://github.com/laravel-bridge/slim-example/tree/using-laravel-bridge) for more detail.
 
-## Using Laravel Service
+### Using Container
 
-`LaravelBridge\Slim\App` will use the Slim default service (e.g. `Slim\Handlers\Error`). If you want to use the Laravel Error handler, you can set the second argument, It will use all Laravel service defined in this bridge.
+App params is Container, like following code.
 
 ```php
+use Slim\App;
+use Slim\Container;
+
+$container = new Container();
+$container[SomeClass::class] = function() {};
+
+$app = new App($container);
+```
+
+Use [`ContainerBuilder`](/src/ContainerBuilder.php) is good for this case. The builder will build an instance of [Scratch Application](https://github.com/laravel-bridge/scratch).
+
+```php
+use LaravelBridge\Slim\ContainerBuilder;
+use Slim\App;
+
+$containerBuilder = new ContainerBuilder();
+
+// Use builder mixin the Scratch Application / Laravel Container
+$containerBuilder->singleton(SomeClass::class, function() {});
+
+$containerBuilder->setupDatabase($conncetion)
+    ->setupProvider(YourProvider::class);
+
+// Register provider for Slim Framework
+$containerBuilder
+    ->useLaravelFoundHandler()
+    ->useLaravelHttp();
+
+// Build Container and bootstrap
+$container = $containerBuilder->buildAndBootstrap();
+
+$app = new App($container);
+```
+
+## Using Laravel Services
+
+`LaravelBridge\Slim\App` will use the Slim default service (e.g. `Slim\Handlers\Error`). If you want to use the Laravel Error handler, you can set the second argument. It will use all Laravel service defined in this bridge.
+
+```php
+use LaravelBridge\Slim\App;
+
 $app = new App([], true);
 ```
 
-If you want to use some of Laravel service, use the [`ContainerBuilder`](/src/ContainerBuilder.php). The builder will build an instance of [Scratch Application](https://github.com/laravel-bridge/scratch).
+ContainerBuilder is like Bridge App:
 
 ```php
-// Container is an instance of Scratch Application
-$container = (new ContainerBuilder())
-    ->useLaravelErrorHandler()
-    ->useLaravelNotFoundHandler()
-    ->build();
+use LaravelBridge\Slim\ContainerBuilder;
 
-// Use container as Scratch Application
-$container->setupDatabase($conncetion)
-    ->setupProvider(YourProvider::class)
-    ->bootstrap();
-
-$app = new App($container);
+$app = new ContainerBuilder([], true);
 ```
 
 ### `foundHandler`
 
 The `foundHandler` in Slim is invoke when the route found.
 
-This bridge implements a auto injection handler like Laravel, names [`RequestResponse`](/src/Handlers/Strategies/RequestResponse.php). Use Laravel Service or call `ContainerBuilder::useLaravelFoundHandler()` can enable handler.
+This bridge implements a auto injection handler for call a callable, names [`RequestResponse`](/src/Handlers/Strategies/RequestResponse.php). Use Laravel Service or call `ContainerBuilder::useLaravelFoundHandler()` can enable handler.
 
 ```php
 $container = (new ContainerBuilder())
     ->useLaravelFoundHandler()
-    ->build();
+    ->buildAndBootstrap();
 
 $app = new App($container);
 
@@ -75,6 +118,44 @@ $app->get('/', function (IlluminateRequest $request, $args) {
 });
 ```
 
+### `callableResolver`
+
+This bridge implements a auto injection handler for new controller, names [`CallableResolver`](/src/CallableResolver.php). Use Laravel Service or call `ContainerBuilder::useLaravelCallableResolver()` to enable.
+
+```php
+class SomeController
+{
+    public function __construct(Dep $dep) {}
+
+    public function __invoke() {}
+
+    public function view() {}
+}
+
+
+$container = (new ContainerBuilder())
+    ->useLaravelCallableResolver()
+    ->buildAndBootstrap();
+
+$app = new App($container);
+
+// Will call SomeController::__invoke()
+$app->get('/', 'SomeController');
+
+// Will call SomeController::view()
+$app->get('/', 'SomeController:view');
+```
+
 ### `settings`
 
-Slim use the `Collection` class, Laravel Bridge use the `Illuminate\Config\Repository` class.
+Laravel Bridge use the `Collection` class default. [Using Laravel Services](#using-laravel-services) or call `useLaravelSettings()` method on ContainerBuilder will use the `Illuminate\Config\Repository` class. 
+
+```php
+$container = (new ContainerBuilder())
+    ->setSettings(['foo' => 'bar'])
+    ->useLaravelSettings()
+    ->buildAndBootstrap();
+
+// Return a Repository instance
+$container->get('settings');
+```
