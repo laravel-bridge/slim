@@ -49,11 +49,6 @@ class ContainerBuilder
     ];
 
     /**
-     * @var array
-     */
-    private $services;
-
-    /**
      * @var bool
      */
     private $useLaravelSetting = false;
