@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use BadMethodCallException;
 use Illuminate\Config\Repository;
 use LaravelBridge\Slim\ContainerBuilder;
 use LaravelBridge\Slim\Handlers\Error as LaravelError;
@@ -78,5 +79,40 @@ class ContainerBuilderTest extends TestCase
 
         $this->assertInstanceOf(Repository::class, $target->get('settings'));
         $this->assertSame($expected, $target->get('settings')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMixinContainer(): void
+    {
+        $target = new ContainerBuilder();
+        $target->instance('foo', 'bar');
+
+        $this->assertSame('bar', $target->get('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldMixinContainerAndCanFluentCall(): void
+    {
+        $target = (new ContainerBuilder())
+            ->setupConfig('foo', 'bar')
+            ->useLaravelSettings()
+            ->buildAndBootstrap();
+
+        $this->assertInstanceOf(Repository::class, $target->get('settings'));
+        $this->assertSame('bar', $target->get('config')['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenMethodNotFound(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+
+        (new ContainerBuilder())->notFound();
     }
 }

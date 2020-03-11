@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaravelBridge\Slim;
 
+use BadMethodCallException;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +29,9 @@ use LaravelBridge\Slim\Providers\PhpErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\SettingsAwareTrait;
 use Slim\Collection;
 
+/**
+ * @mixin Application
+ */
 class ContainerBuilder
 {
     use LaravelBridgeContainerAwareTrait;
@@ -66,6 +70,21 @@ class ContainerBuilder
         }
     }
 
+    public function __call($name, $arguments)
+    {
+        if (!method_exists($this->container, $name)) {
+            throw new BadMethodCallException("Undefined method {$name}");
+        }
+
+        $return = $this->container->{$name}(...$arguments);
+
+        if ($this->container === $return) {
+            return $this;
+        }
+
+        return $return;
+    }
+
     /**
      * @return Application
      */
@@ -78,6 +97,14 @@ class ContainerBuilder
         $this->registerSettingProvider();
 
         return $this->container;
+    }
+
+    /**
+     * @return Application
+     */
+    public function buildAndBootstrap(): Application
+    {
+        return $this->build()->bootstrap();
     }
 
     /**
