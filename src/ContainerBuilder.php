@@ -75,9 +75,7 @@ class ContainerBuilder
             $this->container->setupProvider($provider);
         }
 
-        $this->registerSettingProvider($this->container);
-
-        $this->container->setupConfig('settings', $this->settings);
+        $this->registerSettingProvider();
 
         return $this->container;
     }
@@ -310,9 +308,9 @@ class ContainerBuilder
         }
     }
 
-    private function registerSettingProvider(Application $container): void
+    private function registerSettingProvider(): void
     {
-        $container->bindIf('settings', function () {
+        $this->container->bindIf('settings', function () {
             if ($this->useLaravelSetting) {
                 return new Repository($this->settings);
             }
