@@ -312,12 +312,12 @@ class ContainerBuilder
 
     private function registerSettingProvider(Application $container): void
     {
-        $container->singleton('settings', function () {
+        $container->bindIf('settings', function () {
             if ($this->useLaravelSetting) {
                 return new Repository($this->settings);
             }
 
             return new Collection($this->settings);
-        });
+        }, true);
     }
 }
