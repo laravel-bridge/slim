@@ -82,6 +82,24 @@ $container = $containerBuilder->buildAndBootstrap();
 $app = new App($container);
 ```
 
+Alternatively, ContainerBuilder can use Pimple / Slim container, too.
+
+```php
+use LaravelBridge\Slim\ContainerBuilder;
+use Slim\App;
+use Slim\Container;
+
+$slimContainer = new Container();
+$slimContainer['foo'] = 'bar';
+
+$containerBuilder = new ContainerBuilder($slimContainer);
+
+// Build Container and bootstrap
+$container = $containerBuilder->buildAndBootstrap();
+
+$container->make('foo') // Will return 'bar'
+```
+
 ## Using Laravel Services
 
 `LaravelBridge\Slim\App` will use the Slim default service (e.g. `Slim\Handlers\Error`). If you want to use the Laravel Error handler, you can set the second argument. It will use all Laravel service defined in this bridge.

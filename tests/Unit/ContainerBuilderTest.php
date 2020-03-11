@@ -4,11 +4,14 @@ namespace Tests\Unit;
 
 use BadMethodCallException;
 use Illuminate\Config\Repository;
+use InvalidArgumentException;
 use LaravelBridge\Slim\ContainerBuilder;
 use LaravelBridge\Slim\Handlers\Error as LaravelError;
 use LaravelBridge\Slim\Handlers\NotFound as LaravelNotFound;
 use PHPUnit\Framework\TestCase;
+use Pimple\Container as PimpleContainer;
 use Slim\Collection;
+use Slim\Container as SlimContainer;
 use Slim\Handlers\PhpError;
 use Slim\Handlers\Strategies\RequestResponse;
 
@@ -79,6 +82,52 @@ class ContainerBuilderTest extends TestCase
 
         $this->assertInstanceOf(Repository::class, $target->get('settings'));
         $this->assertSame($expected, $target->get('settings')->all());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenUsePimpleContainer(): void
+    {
+        $pimple = new PimpleContainer();
+        $pimple['foo'] = 'foo';
+        $pimple['bar'] = function (PimpleContainer $c) {
+            return 'bar' . $c['foo'];
+        };
+
+        $target = (new ContainerBuilder($pimple))
+            ->build();
+
+        $this->assertSame('foo', $target->get('foo'));
+        $this->assertSame('barfoo', $target->get('bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeOkayWhenUseSlimContainer(): void
+    {
+        $pimple = new SlimContainer();
+        $pimple['foo'] = 'foo';
+        $pimple['bar'] = function (SlimContainer $c) {
+            return 'bar' . $c->get('foo');
+        };
+
+        $target = (new ContainerBuilder($pimple))
+            ->build();
+
+        $this->assertSame('foo', $target->get('foo'));
+        $this->assertSame('barfoo', $target->get('bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenParamsInvalid(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new ContainerBuilder('invalid');
     }
 
     /**

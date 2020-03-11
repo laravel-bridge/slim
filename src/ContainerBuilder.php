@@ -8,6 +8,8 @@ use BadMethodCallException;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
+use LaravelBridge\Container\Pimple\Transformers\PimpleToLaravel;
 use LaravelBridge\Container\Traits\LaravelBridgeContainerAwareTrait;
 use LaravelBridge\Scratch\Application;
 use LaravelBridge\Slim\Providers\BaseProvider;
@@ -27,6 +29,7 @@ use LaravelBridge\Slim\Providers\NotAllowedProvider;
 use LaravelBridge\Slim\Providers\NotFoundProvider;
 use LaravelBridge\Slim\Providers\PhpErrorHandlerProvider;
 use LaravelBridge\Slim\Providers\SettingsAwareTrait;
+use Pimple\Container as PimpleContainer;
 use Slim\Collection;
 
 /**
@@ -300,20 +303,29 @@ class ContainerBuilder
     }
 
     /**
-     * @param $container
+     * @param mixed $container
      * @return Application
      */
     private function prepareContainer($container): Application
     {
+        if ($container instanceof PimpleContainer) {
+            $container = (new PimpleToLaravel($container))->transform();
+        }
+
         if ($container instanceof Container) {
             return $this->container = Application::createFromBase($container);
         }
 
-        $this->container = new Application();
+        // When container is array, bind on new container
+        if (is_array($container)) {
+            $this->container = new Application();
 
-        $this->prepareServices($container);
+            $this->prepareServices($container);
 
-        return $this->container;
+            return $this->container;
+        }
+
+        throw new InvalidArgumentException('Argument $container must be a Pimple or Laravel Container or an array');
     }
 
     /**
