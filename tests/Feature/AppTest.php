@@ -30,9 +30,8 @@ class AppTest extends TestCase
             return 'bar';
         });
 
-        $actual = $this->call('GET', '/');
-
-        $this->assertSame('bar', (string)$actual->getBody());
+        $this->call('GET', '/')
+            ->assertSee('bar');
     }
 
     /**

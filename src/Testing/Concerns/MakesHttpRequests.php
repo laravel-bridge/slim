@@ -9,6 +9,7 @@ use Http\Factory\Slim\ServerRequestFactory;
 use Http\Factory\Slim\StreamFactory;
 use Http\Factory\Slim\UploadedFileFactory;
 use Illuminate\Support\Str;
+use MilesChou\Psr\Http\Message\Testing\TestResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -31,7 +32,7 @@ trait MakesHttpRequests
      * @param array $files
      * @param array $server
      * @param string|null $content
-     * @return ResponseInterface
+     * @return TestResponse
      */
     protected function call(
         $method,
@@ -41,12 +42,12 @@ trait MakesHttpRequests
         $files = [],
         $server = [],
         $content = null
-    ): ResponseInterface {
+    ): TestResponse {
         $request = $this->createServerRequest($method, $uri, $parameters, $cookies, $files, $server, $content);
 
         $this->instance('request', $request);
 
-        return $this->slim->run($request);
+        return new TestResponse($this->slim->run($request));
     }
 
     /**
