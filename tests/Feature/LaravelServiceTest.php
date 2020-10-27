@@ -16,8 +16,9 @@ class LaravelServiceTest extends TestCase
         $app = new App(new Container(), true);
         $app->getContainer()->get('settings')->set('displayErrorDetails', true);
 
-        $app->get('/', function (LaravelRequest $request, $args) {
-            return new LaravelResponse('bar');
+        // $foo var name must be same
+        $app->get('/{foo}', function (LaravelRequest $request, $foo) {
+            return new LaravelResponse($foo);
         });
 
         return $app;
@@ -28,7 +29,7 @@ class LaravelServiceTest extends TestCase
      */
     public function shouldBeOkayWhenTestASimpleRouteWithLaravelService(): void
     {
-        $actual = $this->call('GET', '/');
+        $actual = $this->call('GET', '/bar');
 
         $this->assertSame('bar', (string)$actual->getBody());
     }

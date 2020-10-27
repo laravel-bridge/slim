@@ -37,7 +37,7 @@ class RequestResponse implements InvocationStrategyInterface
         ResponseInterface $response,
         array $routeArguments
     ) {
-        $response = $this->container->call($callable, [$routeArguments]);
+        $response = $this->container->call($callable, $routeArguments);
 
         if ($response instanceof SymfonyResponse) {
             return $this->container->make(PsrHttpFactory::class)->createResponse($response);
