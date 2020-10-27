@@ -89,7 +89,9 @@ class ContainerBuilder
     public function build(): Application
     {
         foreach ($this->providers as $provider) {
-            $this->container->setupProvider($provider);
+            // Register provider immediately
+            // See https://github.com/laravel-bridge/slim/issues/6
+            $this->container->setupProvider($provider, true);
         }
 
         $this->registerSettingProvider();
