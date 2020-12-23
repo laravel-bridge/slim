@@ -3,7 +3,7 @@
 <h1 align="center">Laravel Bridge for Slim Framework</h1>
 
 <p align="center">
-<a href="https://travis-ci.com/laravel-bridge/slim"><img src="https://travis-ci.com/laravel-bridge/slim.svg?branch=master" alt="Build Status"></a>
+<img src="https://github.com/laravel-bridge/slim/workflows/tests/badge.svg" alt="tests">
 <a href="https://codecov.io/gh/laravel-bridge/slim"><img src="https://codecov.io/gh/laravel-bridge/slim/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://www.codacy.com/gh/laravel-bridge/slim"><img src="https://api.codacy.com/project/badge/Grade/1c743b7ae64d4579af1798f0840a0d0e" alt="codecov"></a>
 <a href="https://packagist.org/packages/laravel-bridge/slim"><img src="https://poser.pugx.org/laravel-bridge/slim/v/stable" alt="Latest Stable Version"></a>

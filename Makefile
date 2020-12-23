@@ -1,10 +1,10 @@
 #!/usr/bin/make -f
 
-.PHONY: all clean clean-all check test analyse coverage
+.PHONY: all clean clean-all check test coverage
 
 # ---------------------------------------------------------------------
 
-all: test analyse
+all: test
 
 clean:
 	rm -rf ./build
@@ -18,9 +18,6 @@ check:
 
 test: clean check
 	phpdbg -qrr vendor/bin/phpunit
-
-analyse:
-	php vendor/bin/phpstan analyse src --level=0 --memory-limit=0
 
 coverage: test
 	@if [ "`uname`" = "Darwin" ]; then open build/coverage/index.html; fi
